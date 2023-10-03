@@ -1,0 +1,77 @@
+name: keenclient
+help: Keenetic http client
+version: 0.0.1
+
+dependencies:
+  curl: https://curl.se/
+  md5:
+    command: [md5sum, md5]
+  json:
+    command: [jq, json_pp]
+
+environment_variables:
+  - name: KEENETIC_USERNAME
+    help: Keenetic username
+    required: true
+  - name: KEENETIC_PASSWORD
+    help: Keenetic password
+    required: true
+
+commands:
+  - name: login
+    help: Log in to a Keenetic router
+
+    flags:
+      - &hostname
+        long: --hostname
+        arg: hostname
+        help: Host address
+        default: 192.168.1.1
+      - &port
+        long: --port
+        arg: port
+        help: Port number
+      - &https
+        long: --https
+        help: Use https
+
+    examples:
+      - keenclient login --hostname 192.168.0.1 --port 8080
+      - keenclient login --https --hostname myrouter01.keenetic.link
+
+  - name: request
+    help: Make a request to a Keenetic router
+
+    args:
+      - name: url_path
+        help: URL path
+        required: true
+      - name: request_data
+        help: JSON request data
+        required: false
+        validate: json
+
+    flags:
+      - *hostname
+      - *port
+      - *https
+      - long: --output
+        short: -o
+        arg: output
+        help: Write to file instead of stdout
+        validate: parent_dir_exists
+      - long: --verbose
+        help: Make the client more talkative
+
+    examples:
+      - keenclient request /rci/
+      - keenclient request -p 8080 --verbose /rci/
+      - keenclient request -o /tmp/dump /rci/
+      - keenclient request --https --hostname myrouter01.keenetic.link /rci/
+      - >-
+        keenclient request
+        --https
+        --hostname
+        myrouter01.keenetic.link
+        /rci/
+        '[{"show":{"interface":{}}}]'
