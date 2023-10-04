@@ -1,0 +1,38 @@
+name: Lint
+
+on:
+  pull_request:
+
+jobs:
+  yamllint:
+    name: yamllint
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Check out code
+        uses: actions/checkout@v4
+      - name: 🚀 Run yamllint
+        uses: reviewdog/action-yamllint@v1
+        with:
+          filter_mode: nofilter
+
+  shellcheck:
+    name: shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Check out code
+        uses: actions/checkout@v4
+      - name: 🚀 Run shellcheck
+        uses: reviewdog/action-shellcheck@v1
+        with:
+          filter_mode: nofilter
+
+  shfmt:
+    name: shfmt
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Check out code
+        uses: actions/checkout@v4
+      - name: 🚀 Run shfmt
+        uses: reviewdog/action-shfmt@v1
+        with:
+          filter_mode: nofilter
