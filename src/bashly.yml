@@ -1,3 +1,4 @@
+---
 name: keen-cli
 help: Keenetic command-line interface written in Bash
 version: 0.0.1
@@ -54,7 +55,9 @@ commands:
         help: URL path (example `/rci/show/system/`)
         required: true
       - name: request_data
-        help: Request data (if the request_data parameter is specified, a POST request will be made)
+        help: >
+          Request data (if the request_data parameter is specified, a POST
+          request will be made)
         required: false
         validate: json
 
