@@ -1,14 +1,27 @@
 # shellcheck shell=bash disable=SC2154 disable=SC2168
-local hostname port is_https verbose url_path request_data login password
-hostname="${args[--hostname]}"
+local host port scheme verbose url_path request_data login password
+host="${args[--host]}"
 port="${args[--port]}"
-is_https="${args[--https]}"
-output="${args[--output]}"
+scheme="${args[--scheme]}"
+output="${args[--output]:-/dev/stdout}"
+format="${args[--format]}"
 verbose="${args[--verbose]}"
 url_path="${args[url_path]}"
 request_data="${args[request_data]}"
 login="${KEENETIC_USERNAME:?KEENETIC_USERNAME env must be set}"
 password="${KEENETIC_PASSWORD:?KEENETIC_PASSWORD env must be set}"
 
-request_data "${hostname}" "${port}" "${is_https}" "${url_path}" \
-  "${request_data}" "${output}" "${verbose}" "${login}" "${password}"
+data_path=$(mktemp)
+
+request "${host}" "${port}" "${scheme}" "${url_path}" \
+  "${request_data}" "${data_path}" "${verbose}" "${login}" "${password}"
+
+if [[ -n "${format}" ]]; then
+  if ! convert_json_to "${format}" <"${data_path}" >"${output}"; then
+    error "Response conversion error"
+  fi
+else
+  cat "${data_path}" >"${output}"
+fi
+
+rm "${data_path}"

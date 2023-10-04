@@ -16,26 +16,26 @@ version_command() {
 }
 
 # :command.usage
-keenclient_usage() {
+keen_cli_usage() {
   if [[ -n $long_usage ]]; then
-    printf "keenclient - Keenetic http client\n"
+    printf "keen-cli - Keenetic command-line interface written in Bash\n"
     echo
 
   else
-    printf "keenclient - Keenetic http client\n"
+    printf "keen-cli - Keenetic command-line interface written in Bash\n"
     echo
 
   fi
 
   printf "%s\n" "Usage:"
-  printf "  keenclient COMMAND\n"
-  printf "  keenclient [COMMAND] --help | -h\n"
-  printf "  keenclient --version | -v\n"
+  printf "  keen-cli COMMAND\n"
+  printf "  keen-cli [COMMAND] --help | -h\n"
+  printf "  keen-cli --version | -v\n"
   echo
   # :command.usage_commands
   printf "%s\n" "Commands:"
   printf "  %s   Log in to a Keenetic router\n" "login  "
-  printf "  %s   Make a request to a Keenetic router\n" "request"
+  printf "  %s   Make a http-request to a Keenetic router\n" "request"
   echo
 
   # :command.long_usage
@@ -67,20 +67,20 @@ keenclient_usage() {
 }
 
 # :command.usage
-keenclient_login_usage() {
+keen_cli_login_usage() {
   if [[ -n $long_usage ]]; then
-    printf "keenclient login - Log in to a Keenetic router\n"
+    printf "keen-cli login - Log in to a Keenetic router\n"
     echo
 
   else
-    printf "keenclient login - Log in to a Keenetic router\n"
+    printf "keen-cli login - Log in to a Keenetic router\n"
     echo
 
   fi
 
   printf "%s\n" "Usage:"
-  printf "  keenclient login [OPTIONS]\n"
-  printf "  keenclient login --help | -h\n"
+  printf "  keen-cli login [OPTIONS]\n"
+  printf "  keen-cli login --help\n"
   echo
 
   # :command.long_usage
@@ -89,50 +89,52 @@ keenclient_login_usage() {
 
     # :command.usage_flags
     # :flag.usage
-    printf "  %s\n" "--hostname HOSTNAME"
-    printf "    Host address\n"
+    printf "  %s\n" "--host, -h HOST"
+    printf "    Host name\n"
     printf "    Default: 192.168.1.1\n"
     echo
 
     # :flag.usage
-    printf "  %s\n" "--port PORT"
+    printf "  %s\n" "--port, -p PORT"
     printf "    Port number\n"
     echo
 
     # :flag.usage
-    printf "  %s\n" "--https"
-    printf "    Use https\n"
+    printf "  %s\n" "--scheme, -s SCHEME"
+    printf "    URL scheme\n"
+    printf "    Allowed: http, https\n"
+    printf "    Default: http\n"
     echo
 
     # :command.usage_fixed_flags
-    printf "  %s\n" "--help, -h"
+    printf "  %s\n" "--help"
     printf "    Show this help\n"
     echo
 
     # :command.usage_examples
     printf "%s\n" "Examples:"
-    printf "  keenclient login --hostname 192.168.0.1 --port 8080\n"
-    printf "  keenclient login --https --hostname myrouter01.keenetic.link\n"
+    printf "  keenclient login --host 192.168.0.1 --port 8080\n"
+    printf "  keenclient login -s https --host myrouter01.keenetic.link\n"
     echo
 
   fi
 }
 
 # :command.usage
-keenclient_request_usage() {
+keen_cli_request_usage() {
   if [[ -n $long_usage ]]; then
-    printf "keenclient request - Make a request to a Keenetic router\n"
+    printf "keen-cli request - Make a http-request to a Keenetic router\n"
     echo
 
   else
-    printf "keenclient request - Make a request to a Keenetic router\n"
+    printf "keen-cli request - Make a http-request to a Keenetic router\n"
     echo
 
   fi
 
   printf "%s\n" "Usage:"
-  printf "  keenclient request URL_PATH [REQUEST_DATA] [OPTIONS]\n"
-  printf "  keenclient request --help | -h\n"
+  printf "  keen-cli request URL_PATH [REQUEST_DATA] [OPTIONS]\n"
+  printf "  keen-cli request --help\n"
   echo
 
   # :command.long_usage
@@ -141,19 +143,21 @@ keenclient_request_usage() {
 
     # :command.usage_flags
     # :flag.usage
-    printf "  %s\n" "--hostname HOSTNAME"
-    printf "    Host address\n"
+    printf "  %s\n" "--host, -h HOST"
+    printf "    Host name\n"
     printf "    Default: 192.168.1.1\n"
     echo
 
     # :flag.usage
-    printf "  %s\n" "--port PORT"
+    printf "  %s\n" "--port, -p PORT"
     printf "    Port number\n"
     echo
 
     # :flag.usage
-    printf "  %s\n" "--https"
-    printf "    Use https\n"
+    printf "  %s\n" "--scheme, -s SCHEME"
+    printf "    URL scheme\n"
+    printf "    Allowed: http, https\n"
+    printf "    Default: http\n"
     echo
 
     # :flag.usage
@@ -162,12 +166,18 @@ keenclient_request_usage() {
     echo
 
     # :flag.usage
+    printf "  %s\n" "--format, -f FORMAT"
+    printf "\n"
+    printf "    Allowed: json, yaml, xml, props\n"
+    echo
+
+    # :flag.usage
     printf "  %s\n" "--verbose"
     printf "    Make the client more talkative\n"
     echo
 
     # :command.usage_fixed_flags
-    printf "  %s\n" "--help, -h"
+    printf "  %s\n" "--help"
     printf "    Show this help\n"
     echo
 
@@ -176,21 +186,21 @@ keenclient_request_usage() {
 
     # :argument.usage
     printf "  %s\n" "URL_PATH"
-    printf "    URL path\n"
+    printf "    URL path (example \`/rci/show/system/\`)\n"
     echo
 
     # :argument.usage
     printf "  %s\n" "REQUEST_DATA"
-    printf "    JSON request data\n"
+    printf "    Request data (if the request_data parameter is specified, a POST request\n    will be made)\n"
     echo
 
     # :command.usage_examples
     printf "%s\n" "Examples:"
     printf "  keenclient request /rci/\n"
     printf "  keenclient request -p 8080 --verbose /rci/\n"
-    printf "  keenclient request -o /tmp/dump /rci/\n"
-    printf "  keenclient request --https --hostname myrouter01.keenetic.link /rci/\n"
-    printf "  keenclient request --https --hostname myrouter01.keenetic.link /rci/\n  '[{\"show\":{\"interface\":{}}}]'\n"
+    printf "  keenclient request -f yaml -o /tmp/dump /rci/\n"
+    printf "  keenclient request -s https --host myrouter01.keenetic.link /rci/\n"
+    printf "  keenclient request -s https --host myrouter01.keenetic.link /rci/\n  '[{\"show\":{\"interface\":{}}}]'\n"
     echo
 
   fi
@@ -265,31 +275,60 @@ function calculate_hash() {
   echo -n "$sha256string" | shasum -a 256 | awk '{print $1}'
 }
 
-# src/lib/functions/get_base_url.sh
+# src/lib/functions/convert_to.sh
 # shellcheck shell=bash
-function get_base_url() {
-  local host port proto
+convert_to() {
+  input_format="${1:?input_format must be set}"
+  output_format="${2:?output_format must be set}"
+
+  yq -r -e \
+    -p "${input_format}" \
+    -o "${output_format}" \
+    </dev/stdin 2>&1
+}
+
+convert_json_to() {
+  convert_to "json" "${1}"
+}
+
+# src/lib/functions/logging.sh
+# shellcheck shell=bash
+function error() {
+  echo -e "($(date +'%Y-%m-%dT%H:%M:%S')) ERROR: $1" >&2
+  exit 1
+}
+
+function log() {
+  [[ "$2" ]] &&
+    echo -e "($(date +'%Y-%m-%dT%H:%M:%S')) $1" >&2
+  return 0
+}
+
+# src/lib/http/get_http_base_url.sh
+# shellcheck shell=bash
+function get_http_base_url() {
+  local scheme host port
+  scheme="${1:?scheme must be set}"
+  host="${2:?host must be set}"
+  port="${3}"
+
+  echo "${scheme}://${host}${port:+:$port}"
+}
+
+# src/lib/http/get_http_cookie_path.sh
+# shellcheck shell=bash
+function get_http_cookie_path() {
+  local host port
+
   host="${1:?host must be set}"
   port="${2}"
-  proto=$([ -n "$3" ] && echo "https" || echo "http")
 
-  echo "${proto}://${host}${port:+:$port}"
+  echo "${TMPDIR:-/tmp/}keenclient-${host}${port:+:$port}.cookie"
 }
 
-# src/lib/functions/get_cookie_path.sh
+# src/lib/http/get_http_header_value.sh
 # shellcheck shell=bash
-function get_cookie_path() {
-  local hostname port
-
-  hostname="${1:?hostname must be set}"
-  port="${2}"
-
-  echo "${TMPDIR:-/tmp/}keenclient-${hostname}${port:+:$port}.cookie"
-}
-
-# src/lib/functions/get_header_value.sh
-# shellcheck shell=bash
-function get_header_value() {
+function get_http_header_value() {
   local key response
 
   key="${1:?header key must be set}"
@@ -301,30 +340,30 @@ function get_header_value() {
     tr -d '\r'
 }
 
-# src/lib/functions/get_status_code.sh
+# src/lib/http/get_http_status_code.sh
 # shellcheck shell=bash
-function get_status_code() {
+function get_http_status_code() {
   local response
   response="${1:?response must be set}"
 
   echo "$response" | head -n 1 | grep -e "^HTTP" | awk '{print $2}'
 }
 
-# src/lib/functions/http.sh
+# src/lib/http/http_request.sh
 # shellcheck shell=bash
-function request() {
-  local hostname port is_https url_path request_data \
+function http_request() {
+  local host port scheme url_path request_data \
     output_path base_url cookie_path
 
-  hostname="${1:?hostname must be set}"
+  host="${1:?host must be set}"
   port="${2}"
-  is_https="${3}"
+  scheme="${3:?scheme must be set}"
   url_path="${4:?url path must be set}"
   request_data="${5}"
   output_path="${6}"
 
-  base_url=$(get_base_url "${hostname}" "${port}" "${is_https}")
-  cookie_path=$(get_cookie_path "${hostname}" "${port}")
+  base_url=$(get_http_base_url "${scheme}" "${host}" "${port}")
+  cookie_path=$(get_http_cookie_path "${host}" "${port}")
 
   ARGS=(-sS -D -)
 
@@ -344,45 +383,32 @@ function request() {
 }
 
 # request with only headers in response
-function request_ohir() {
-  request "${1}" "${2}" "${3}" "${4}" "${5}" "/dev/null"
+function http_request_ohir() {
+  http_request "${1}" "${2}" "${3}" "${4}" "${5}" "/dev/null"
 }
 
-# src/lib/functions/logging.sh
-# shellcheck shell=bash
-function error() {
-  echo -e "($(date +'%Y-%m-%dT%H:%M:%S')) ERROR: $1" >&2
-  exit 1
-}
-
-function log() {
-  [[ "$2" ]] &&
-    echo -e "($(date +'%Y-%m-%dT%H:%M:%S')) $1" >&2
-  return 0
-}
-
-# src/lib/functions/login.sh
+# src/lib/login.sh
 # shellcheck shell=bash
 function login() {
-  local hostname port is_https verbose login password response
-  hostname="${1:?hostname must be set}"
+  local host port scheme verbose login password response
+  host="${1:?host must be set}"
   port="${2}"
-  is_https="${3}"
+  scheme="${3:?scheme must be set}"
   verbose="${4}"
   login="${5:?login must be set}"
   password="${6:?password must be set}"
 
   if ! response=$(
-    request_ohir \
-      "${hostname}" \
+    http_request_ohir \
+      "${host}" \
       "${port}" \
-      "${is_https}" \
+      "${scheme}" \
       "/auth"
   ); then
     error "Login failed, $response"
   fi
 
-  status_code=$(get_status_code "$response")
+  status_code=$(get_http_status_code "$response")
   [[ "$status_code" -eq 200 ]] &&
     log "Already logged in" "${verbose}" &&
     return 0
@@ -390,8 +416,8 @@ function login() {
   [[ "$status_code" -ne 401 ]] &&
     error "Login failed${status_code:+, status_code: ${status_code}}"
 
-  x_ndm_realm=$(get_header_value "x-ndm-realm" "${response}")
-  x_ndm_challenge=$(get_header_value "x-ndm-challenge" "${response}")
+  x_ndm_realm=$(get_http_header_value "x-ndm-realm" "${response}")
+  x_ndm_challenge=$(get_http_header_value "x-ndm-challenge" "${response}")
 
   [[ -z "$x_ndm_realm" || -z "$x_ndm_challenge" ]] &&
     error "Login failed, required headers not found"
@@ -404,34 +430,34 @@ function login() {
       "${x_ndm_challenge}"
   )
 
-  log "Log in to ${hostname}..." "${verbose}"
+  log "Log in to ${host}..." "${verbose}"
 
   if ! response=$(
-    request_ohir \
-      "${hostname}" \
+    http_request_ohir \
+      "${host}" \
       "${port}" \
-      "${is_https}" \
+      "${scheme}" \
       "/auth" \
       "{\"login\":\"${login}\",\"password\":\"$hash\"}"
   ); then
     error "Login failed, $response"
   fi
 
-  status_code=$(get_status_code "$response")
+  status_code=$(get_http_status_code "$response")
   [[ "$status_code" -ne 200 ]] &&
     error "Login failed${status_code:+, status_code: ${status_code}}"
 
   log "Login successful" "${verbose}"
 }
 
-# src/lib/functions/request.sh
+# src/lib/request.sh
 # shellcheck shell=bash
-function request_data() {
-  local hostname port is_https url_path request_data output \
-    output_path verbose login password response
-  hostname="${1:?hostname must be set}"
+function request() {
+  local host port scheme url_path request_data output \
+    verbose login password response
+  host="${1:?host must be set}"
   port="${2}"
-  is_https="${3}"
+  scheme="${3:?scheme must be set}"
   url_path="${4}"
   request_data="${5}"
   output="${6}"
@@ -439,35 +465,26 @@ function request_data() {
   login="${8:?login must be set}"
   password="${9:?password must be set}"
 
-  output_path=$(mktemp)
-
-  login "${hostname}" "${port}" "${is_https}" "${verbose}" \
+  login "${host}" "${port}" "${scheme}" "${verbose}" \
     "${login}" "${password}"
 
-  [[ -n "${output}" ]] &&
-    output_path="${output}"
-
-  log "Trying ${hostname}..." "${verbose}"
+  log "Trying ${host}..." "${verbose}"
 
   if ! response=$(
-    request \
-      "${hostname}" \
+    http_request \
+      "${host}" \
       "${port}" \
-      "${is_https}" \
+      "${scheme}" \
       "${url_path}" \
       "${request_data}" \
-      "${output_path}"
+      "${output}"
   ); then
     error "Request failed, $response"
   fi
 
-  status_code=$(get_status_code "$response")
+  status_code=$(get_http_status_code "$response")
   [[ "$status_code" != 2* ]] &&
     error "Request failed${status_code:+, status_code: ${status_code}}"
-
-  [[ -z "${output}" ]] &&
-    cat "${output_path}" &&
-    rm "${output_path}"
 
   log "Request successful, status_code: ${status_code}" "${verbose}"
 }
@@ -483,44 +500,57 @@ validate_file_path() {
 # src/lib/validations/validate_json.sh
 # shellcheck shell=bash disable=SC2154
 validate_json() {
-  if ! result=$(echo "$1" | "${deps[json]}" 2>&1); then
+  if ! result=$(echo "$1" | yq -p json 2>&1); then
     echo "${result}"
   fi
 }
 
 # :command.command_functions
 # :command.function
-keenclient_login_command() {
+keen_cli_login_command() {
   # src/login_command.sh
   # shellcheck shell=bash disable=SC2154 disable=SC2168
-  local hostname port is_https login password
-  hostname="${args[--hostname]}"
+  local host port scheme login password
+  host="${args[--host]}"
   port="${args[--port]}"
-  is_https="${args[--https]}"
+  scheme="${args[--scheme]}"
   login="${KEENETIC_USERNAME:?KEENETIC_USERNAME env must be set}"
   password="${KEENETIC_PASSWORD:?KEENETIC_PASSWORD env must be set}"
 
-  login "${hostname}" "${port}" "${is_https}" "1" "${login}" "${password}"
+  login "${host}" "${port}" "${scheme}" "1" "${login}" "${password}"
 
 }
 
 # :command.function
-keenclient_request_command() {
+keen_cli_request_command() {
   # src/request_command.sh
   # shellcheck shell=bash disable=SC2154 disable=SC2168
-  local hostname port is_https verbose url_path request_data login password
-  hostname="${args[--hostname]}"
+  local host port scheme verbose url_path request_data login password
+  host="${args[--host]}"
   port="${args[--port]}"
-  is_https="${args[--https]}"
-  output="${args[--output]}"
+  scheme="${args[--scheme]}"
+  output="${args[--output]:-/dev/stdout}"
+  format="${args[--format]}"
   verbose="${args[--verbose]}"
   url_path="${args[url_path]}"
   request_data="${args[request_data]}"
   login="${KEENETIC_USERNAME:?KEENETIC_USERNAME env must be set}"
   password="${KEENETIC_PASSWORD:?KEENETIC_PASSWORD env must be set}"
 
-  request_data "${hostname}" "${port}" "${is_https}" "${url_path}" \
-    "${request_data}" "${output}" "${verbose}" "${login}" "${password}"
+  data_path=$(mktemp)
+
+  request "${host}" "${port}" "${scheme}" "${url_path}" \
+    "${request_data}" "${data_path}" "${verbose}" "${login}" "${password}"
+
+  if [[ -n "${format}" ]]; then
+    if ! convert_json_to "${format}" <"${data_path}" >"${output}"; then
+      error "Response conversion error"
+    fi
+  else
+    cat "${data_path}" >"${output}"
+  fi
+
+  rm "${data_path}"
 
 }
 
@@ -536,7 +566,7 @@ parse_requirements() {
 
       --help | -h)
         long_usage=yes
-        keenclient_usage
+        keen_cli_usage
         exit
         ;;
 
@@ -567,17 +597,18 @@ parse_requirements() {
     exit 1
   fi
 
+  if command -v yq >/dev/null 2>&1; then
+    deps['yq']="$(command -v yq | head -n1)"
+  else
+    printf "missing dependency: yq\n" >&2
+    printf "%s\n" "https://mikefarah.gitbook.io/yq/" >&2
+    exit 1
+  fi
+
   if command -v md5sum md5 >/dev/null 2>&1; then
     deps['md5']="$(command -v md5sum md5 | head -n1)"
   else
     printf "missing dependency: md5 (md5sum/md5)\n" >&2
-    exit 1
-  fi
-
-  if command -v jq json_pp >/dev/null 2>&1; then
-    deps['json']="$(command -v jq json_pp | head -n1)"
-  else
-    printf "missing dependency: json (jq/json_pp)\n" >&2
     exit 1
   fi
 
@@ -590,20 +621,20 @@ parse_requirements() {
     login)
       action="login"
       shift
-      keenclient_login_parse_requirements "$@"
+      keen_cli_login_parse_requirements "$@"
       shift $#
       ;;
 
     request)
       action="request"
       shift
-      keenclient_request_parse_requirements "$@"
+      keen_cli_request_parse_requirements "$@"
       shift $#
       ;;
 
     # :command.command_fallback
     "")
-      keenclient_usage >&2
+      keen_cli_usage >&2
       exit 1
       ;;
 
@@ -638,13 +669,13 @@ parse_requirements() {
 }
 
 # :command.parse_requirements
-keenclient_login_parse_requirements() {
+keen_cli_login_parse_requirements() {
   # :command.fixed_flags_filter
   while [[ $# -gt 0 ]]; do
     case "${1:-}" in
-      --help | -h)
+      --help)
         long_usage=yes
-        keenclient_login_usage
+        keen_cli_login_usage
         exit
         ;;
 
@@ -663,22 +694,22 @@ keenclient_login_parse_requirements() {
     key="$1"
     case "$key" in
       # :flag.case
-      --hostname)
+      --host | -h)
 
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
 
-          args['--hostname']="$2"
+          args['--host']="$2"
           shift
           shift
         else
-          printf "%s\n" "--hostname requires an argument: --hostname HOSTNAME" >&2
+          printf "%s\n" "--host requires an argument: --host, -h HOST" >&2
           exit 1
         fi
         ;;
 
       # :flag.case
-      --port)
+      --port | -p)
 
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
@@ -687,17 +718,24 @@ keenclient_login_parse_requirements() {
           shift
           shift
         else
-          printf "%s\n" "--port requires an argument: --port PORT" >&2
+          printf "%s\n" "--port requires an argument: --port, -p PORT" >&2
           exit 1
         fi
         ;;
 
       # :flag.case
-      --https)
+      --scheme | -s)
 
-        # :flag.case_no_arg
-        args['--https']=1
-        shift
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+
+          args['--scheme']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--scheme requires an argument: --scheme, -s SCHEME" >&2
+          exit 1
+        fi
         ;;
 
       -?*)
@@ -717,18 +755,25 @@ keenclient_login_parse_requirements() {
   done
 
   # :command.default_assignments
-  [[ -n ${args['--hostname']:-} ]] || args['--hostname']="192.168.1.1"
+  [[ -n ${args['--host']:-} ]] || args['--host']="192.168.1.1"
+  [[ -n ${args['--scheme']:-} ]] || args['--scheme']="http"
+
+  # :command.whitelist_filter
+  if [[ ${args['--scheme']} ]] && [[ ! ${args['--scheme']} =~ ^(http|https)$ ]]; then
+    printf "%s\n" "--scheme must be one of: http, https" >&2
+    exit 1
+  fi
 
 }
 
 # :command.parse_requirements
-keenclient_request_parse_requirements() {
+keen_cli_request_parse_requirements() {
   # :command.fixed_flags_filter
   while [[ $# -gt 0 ]]; do
     case "${1:-}" in
-      --help | -h)
+      --help)
         long_usage=yes
-        keenclient_request_usage
+        keen_cli_request_usage
         exit
         ;;
 
@@ -747,22 +792,22 @@ keenclient_request_parse_requirements() {
     key="$1"
     case "$key" in
       # :flag.case
-      --hostname)
+      --host | -h)
 
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
 
-          args['--hostname']="$2"
+          args['--host']="$2"
           shift
           shift
         else
-          printf "%s\n" "--hostname requires an argument: --hostname HOSTNAME" >&2
+          printf "%s\n" "--host requires an argument: --host, -h HOST" >&2
           exit 1
         fi
         ;;
 
       # :flag.case
-      --port)
+      --port | -p)
 
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
@@ -771,17 +816,24 @@ keenclient_request_parse_requirements() {
           shift
           shift
         else
-          printf "%s\n" "--port requires an argument: --port PORT" >&2
+          printf "%s\n" "--port requires an argument: --port, -p PORT" >&2
           exit 1
         fi
         ;;
 
       # :flag.case
-      --https)
+      --scheme | -s)
 
-        # :flag.case_no_arg
-        args['--https']=1
-        shift
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+
+          args['--scheme']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--scheme requires an argument: --scheme, -s SCHEME" >&2
+          exit 1
+        fi
         ;;
 
       # :flag.case
@@ -790,8 +842,8 @@ keenclient_request_parse_requirements() {
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
           # :flag.validations
-          if [[ -n $(validate_parent_dir_exists "$2") ]]; then
-            printf "validation error in %s:\n%s\n" "--output, -o OUTPUT" "$(validate_parent_dir_exists "$2")" >&2
+          if [[ -n $(validate_file_path "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--output, -o OUTPUT" "$(validate_file_path "$2")" >&2
             exit 1
           fi
 
@@ -800,6 +852,21 @@ keenclient_request_parse_requirements() {
           shift
         else
           printf "%s\n" "--output requires an argument: --output, -o OUTPUT" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --format | -f)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+
+          args['--format']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--format requires an argument: --format, -f FORMAT" >&2
           exit 1
         fi
         ;;
@@ -845,12 +912,23 @@ keenclient_request_parse_requirements() {
 
   # :command.required_args_filter
   if [[ -z ${args['url_path']+x} ]]; then
-    printf "missing required argument: URL_PATH\nusage: keenclient request URL_PATH [REQUEST_DATA] [OPTIONS]\n" >&2
+    printf "missing required argument: URL_PATH\nusage: keen-cli request URL_PATH [REQUEST_DATA] [OPTIONS]\n" >&2
     exit 1
   fi
 
   # :command.default_assignments
-  [[ -n ${args['--hostname']:-} ]] || args['--hostname']="192.168.1.1"
+  [[ -n ${args['--host']:-} ]] || args['--host']="192.168.1.1"
+  [[ -n ${args['--scheme']:-} ]] || args['--scheme']="http"
+
+  # :command.whitelist_filter
+  if [[ ${args['--scheme']} ]] && [[ ! ${args['--scheme']} =~ ^(http|https)$ ]]; then
+    printf "%s\n" "--scheme must be one of: http, https" >&2
+    exit 1
+  fi
+  if [[ ${args['--format']} ]] && [[ ! ${args['--format']} =~ ^(json|yaml|xml|props)$ ]]; then
+    printf "%s\n" "--format must be one of: json, yaml, xml, props" >&2
+    exit 1
+  fi
 
 }
 
@@ -872,8 +950,8 @@ run() {
   parse_requirements "${input[@]}"
 
   case "$action" in
-    "login") keenclient_login_command ;;
-    "request") keenclient_request_command ;;
+    "login") keen_cli_login_command ;;
+    "request") keen_cli_request_command ;;
   esac
 }
 

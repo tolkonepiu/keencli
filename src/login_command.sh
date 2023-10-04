@@ -1,9 +1,9 @@
 # shellcheck shell=bash disable=SC2154 disable=SC2168
-local hostname port is_https login password
-hostname="${args[--hostname]}"
+local host port scheme login password
+host="${args[--host]}"
 port="${args[--port]}"
-is_https="${args[--https]}"
+scheme="${args[--scheme]}"
 login="${KEENETIC_USERNAME:?KEENETIC_USERNAME env must be set}"
 password="${KEENETIC_PASSWORD:?KEENETIC_PASSWORD env must be set}"
 
-login "${hostname}" "${port}" "${is_https}" "1" "${login}" "${password}"
+login "${host}" "${port}" "${scheme}" "1" "${login}" "${password}"

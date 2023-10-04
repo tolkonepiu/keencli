@@ -1,5 +1,5 @@
 # shellcheck shell=bash
-function get_header_value() {
+function get_http_header_value() {
   local key response
 
   key="${1:?header key must be set}"

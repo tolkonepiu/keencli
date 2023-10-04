@@ -5,10 +5,6 @@ load test_helper.bash
 # shellcheck source=../src/lib/validations/validate_json.sh
 source "src/lib/validations/validate_json.sh"
 
-setup() {
-  deps[json]=$(which jq)
-}
-
 @test "when json is valid" {
   run validate_json '{"key":"value"}'
   [ "$status" -eq 0 ]
