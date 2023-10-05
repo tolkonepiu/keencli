@@ -44,8 +44,10 @@ jobs:
     steps:
       - name: ⤵️ Check out code
         uses: actions/checkout@v4
-      - name: 🏗️ Setup ruby and bashly
+      - name: 🏗️ Setup bashly (with ruby)
         uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
       - name: 🚀 Run bashly
         run: bashly generate --upgrade
       - name: Checks if there are any uncommitted changes
