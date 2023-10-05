@@ -42,6 +42,9 @@ jobs:
     name: bashly
     runs-on: ubuntu-latest
     steps:
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2.2"
       - name: 🏗️ Setup bashly
         run: gem install bashly -v 1.1.0
       - name: ⤵️ Check out code
