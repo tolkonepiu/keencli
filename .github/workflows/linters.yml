@@ -1,0 +1,85 @@
+---
+name: Linters
+
+"on":
+  pull_request:
+
+jobs:
+  yamllint:
+    name: yamllint
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Check out code
+        uses: actions/checkout@v4
+      - name: 🚀 Run yamllint
+        uses: reviewdog/action-yamllint@v1
+        with:
+          reporter: github-pr-review
+          filter_mode: nofilter
+          fail_on_error: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  shellcheck:
+    name: shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Check out code
+        uses: actions/checkout@v4
+      - name: 🚀 Run shellcheck
+        uses: reviewdog/action-shellcheck@v1
+        with:
+          reporter: github-pr-review
+          filter_mode: nofilter
+          fail_on_error: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  shfmt:
+    name: shfmt
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Check out code
+        uses: actions/checkout@v4
+      - name: 🚀 Run shfmt
+        uses: reviewdog/action-shfmt@v1
+        with:
+          reporter: github-pr-review
+          filter_mode: nofilter
+          fail_on_error: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  markdownlint:
+    name: markdownlint
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Check out code
+        uses: actions/checkout@v4
+      - name: 🚀 Run markdownlint
+        uses: reviewdog/action-markdownlint@v0
+        with:
+          reporter: github-pr-review
+          filter_mode: nofilter
+          fail_on_error: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  bashly:
+    name: bashly
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Check out code
+        uses: actions/checkout@v4
+      - name: 🏗️ Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
+      - name: 🏗️ Setup bashly
+        run: gem install bashly -v "${BASHLY_VERSION}"
+        env:
+          BASHLY_VERSION: 1.1.0
+      - name: 🚀 Run bashly
+        run: bashly generate --upgrade
+      - name: suggester / bashly
+        uses: reviewdog/action-suggester@v1
+        with:
+          tool_name: bashly
+          fail_on_error: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
