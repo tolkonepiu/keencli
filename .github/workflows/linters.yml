@@ -16,6 +16,7 @@ jobs:
         with:
           reporter: github-pr-review
           filter_mode: nofilter
+          fail_on_error: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
   shellcheck:
@@ -29,6 +30,7 @@ jobs:
         with:
           reporter: github-pr-review
           filter_mode: nofilter
+          fail_on_error: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
   shfmt:
@@ -42,6 +44,7 @@ jobs:
         with:
           reporter: github-pr-review
           filter_mode: nofilter
+          fail_on_error: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
   markdownlint:
@@ -55,6 +58,7 @@ jobs:
         with:
           reporter: github-pr-review
           filter_mode: nofilter
+          fail_on_error: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
   bashly:
@@ -77,4 +81,5 @@ jobs:
         uses: reviewdog/action-suggester@v1
         with:
           tool_name: bashly
+          fail_on_error: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
