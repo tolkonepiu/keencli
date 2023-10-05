@@ -42,10 +42,10 @@ jobs:
     name: bashly
     runs-on: ubuntu-latest
     steps:
-      - name: 🏗️ Setup ruby and bashly
-        uses: ruby/setup-ruby@v1
       - name: ⤵️ Check out code
         uses: actions/checkout@v4
+      - name: 🏗️ Setup ruby and bashly
+        uses: ruby/setup-ruby@v1
       - name: 🚀 Run bashly
         run: bashly generate --upgrade
       - name: Checks if there are any uncommitted changes
