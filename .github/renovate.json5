@@ -1,0 +1,37 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: ["config:base"],
+  customManagers: [
+    // ruby version
+    {
+      customType: "regex",
+      fileMatch: [".+\\.ya?ml$"],
+      matchStrings: ["ruby-version: (?<currentValue>.*?)\\n"],
+      versioning: "ruby",
+    },
+    // bashly version
+    {
+      customType: "regex",
+      fileMatch: [".+\\.ya?ml$"],
+      matchStrings: ["BASHLY_VERSION: (?<currentValue>.*?)\\n"],
+      depNameTemplate: "DannyBen/bashly",
+      datasourceTemplate: "github-releases",
+      extractVersionTemplate: "^v(?<version>.*)$",
+    },
+    // bats version
+    {
+      customType: "regex",
+      fileMatch: [".+\\.ya?ml$"],
+      matchStrings: ["bats-version: (?<currentValue>.*?)\\n"],
+      depNameTemplate: "bats-core/bats-core",
+      datasourceTemplate: "github-releases",
+      extractVersionTemplate: "^v(?<version>.*)$",
+    },
+  ],
+  packageRules: [
+    {
+      matchUpdateTypes: ["minor", "patch", "pin", "digest"],
+      automerge: true,
+    },
+  ],
+}
