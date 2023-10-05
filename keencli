@@ -16,21 +16,21 @@ version_command() {
 }
 
 # :command.usage
-keen_cli_usage() {
+keencli_usage() {
   if [[ -n $long_usage ]]; then
-    printf "keen-cli - Keenetic command-line interface written in Bash\n"
+    printf "keencli - Keenetic command-line interface written in Bash\n"
     echo
 
   else
-    printf "keen-cli - Keenetic command-line interface written in Bash\n"
+    printf "keencli - Keenetic command-line interface written in Bash\n"
     echo
 
   fi
 
   printf "%s\n" "Usage:"
-  printf "  keen-cli COMMAND\n"
-  printf "  keen-cli [COMMAND] --help | -h\n"
-  printf "  keen-cli --version | -v\n"
+  printf "  keencli COMMAND\n"
+  printf "  keencli [COMMAND] --help | -h\n"
+  printf "  keencli --version | -v\n"
   echo
   # :command.usage_commands
   printf "%s\n" "Commands:"
@@ -67,20 +67,20 @@ keen_cli_usage() {
 }
 
 # :command.usage
-keen_cli_login_usage() {
+keencli_login_usage() {
   if [[ -n $long_usage ]]; then
-    printf "keen-cli login - Log in to a Keenetic router\n"
+    printf "keencli login - Log in to a Keenetic router\n"
     echo
 
   else
-    printf "keen-cli login - Log in to a Keenetic router\n"
+    printf "keencli login - Log in to a Keenetic router\n"
     echo
 
   fi
 
   printf "%s\n" "Usage:"
-  printf "  keen-cli login [OPTIONS]\n"
-  printf "  keen-cli login --help\n"
+  printf "  keencli login [OPTIONS]\n"
+  printf "  keencli login --help\n"
   echo
 
   # :command.long_usage
@@ -113,28 +113,28 @@ keen_cli_login_usage() {
 
     # :command.usage_examples
     printf "%s\n" "Examples:"
-    printf "  keenclient login --host 192.168.0.1 --port 8080\n"
-    printf "  keenclient login -s https --host myrouter01.keenetic.link\n"
+    printf "  keencli login --host 192.168.0.1 --port 8080\n"
+    printf "  keencli login -s https --host myrouter01.keenetic.link\n"
     echo
 
   fi
 }
 
 # :command.usage
-keen_cli_request_usage() {
+keencli_request_usage() {
   if [[ -n $long_usage ]]; then
-    printf "keen-cli request - Make a http-request to a Keenetic router\n"
+    printf "keencli request - Make a http-request to a Keenetic router\n"
     echo
 
   else
-    printf "keen-cli request - Make a http-request to a Keenetic router\n"
+    printf "keencli request - Make a http-request to a Keenetic router\n"
     echo
 
   fi
 
   printf "%s\n" "Usage:"
-  printf "  keen-cli request URL_PATH [REQUEST_DATA] [OPTIONS]\n"
-  printf "  keen-cli request --help\n"
+  printf "  keencli request URL_PATH [REQUEST_DATA] [OPTIONS]\n"
+  printf "  keencli request --help\n"
   echo
 
   # :command.long_usage
@@ -196,11 +196,11 @@ keen_cli_request_usage() {
 
     # :command.usage_examples
     printf "%s\n" "Examples:"
-    printf "  keenclient request /rci/\n"
-    printf "  keenclient request -p 8080 --verbose /rci/\n"
-    printf "  keenclient request -f yaml -o /tmp/dump /rci/\n"
-    printf "  keenclient request -s https --host myrouter01.keenetic.link /rci/\n"
-    printf "  keenclient request -s https --host myrouter01.keenetic.link /rci/\n  '[{\"show\":{\"interface\":{}}}]'\n"
+    printf "  keencli request /rci/\n"
+    printf "  keencli request -p 8080 --verbose /rci/\n"
+    printf "  keencli request -f yaml -o /tmp/dump /rci/\n"
+    printf "  keencli request -s https --host myrouter01.keenetic.link /rci/\n"
+    printf "  keencli request -s https --host myrouter01.keenetic.link /rci/\n  '[{\"show\":{\"interface\":{}}}]'\n"
     echo
 
   fi
@@ -323,7 +323,7 @@ function get_http_cookie_path() {
   host="${1:?host must be set}"
   port="${2}"
 
-  echo "${TMPDIR:-/tmp/}keenclient-${host}${port:+:$port}.cookie"
+  echo "${TMPDIR:-/tmp/}keencli-${host}${port:+:$port}.cookie"
 }
 
 # src/lib/http/get_http_header_value.sh
@@ -369,7 +369,7 @@ function http_request() {
 
   if [[ -n "${request_data}" ]]; then
     ARGS+=(--json "${request_data}")
-  fidd
+  fi
 
   if [[ -n "${output_path}" ]]; then
     ARGS+=(-o "${output_path}")
@@ -507,7 +507,7 @@ validate_json() {
 
 # :command.command_functions
 # :command.function
-keen_cli_login_command() {
+keencli_login_command() {
   # src/login_command.sh
   # shellcheck shell=bash disable=SC2154 disable=SC2168
   local host port scheme login password
@@ -522,7 +522,7 @@ keen_cli_login_command() {
 }
 
 # :command.function
-keen_cli_request_command() {
+keencli_request_command() {
   # src/request_command.sh
   # shellcheck shell=bash disable=SC2154 disable=SC2168
   local host port scheme verbose url_path request_data login password
@@ -566,7 +566,7 @@ parse_requirements() {
 
       --help | -h)
         long_usage=yes
-        keen_cli_usage
+        keencli_usage
         exit
         ;;
 
@@ -621,20 +621,20 @@ parse_requirements() {
     login)
       action="login"
       shift
-      keen_cli_login_parse_requirements "$@"
+      keencli_login_parse_requirements "$@"
       shift $#
       ;;
 
     request)
       action="request"
       shift
-      keen_cli_request_parse_requirements "$@"
+      keencli_request_parse_requirements "$@"
       shift $#
       ;;
 
     # :command.command_fallback
     "")
-      keen_cli_usage >&2
+      keencli_usage >&2
       exit 1
       ;;
 
@@ -669,13 +669,13 @@ parse_requirements() {
 }
 
 # :command.parse_requirements
-keen_cli_login_parse_requirements() {
+keencli_login_parse_requirements() {
   # :command.fixed_flags_filter
   while [[ $# -gt 0 ]]; do
     case "${1:-}" in
       --help)
         long_usage=yes
-        keen_cli_login_usage
+        keencli_login_usage
         exit
         ;;
 
@@ -767,13 +767,13 @@ keen_cli_login_parse_requirements() {
 }
 
 # :command.parse_requirements
-keen_cli_request_parse_requirements() {
+keencli_request_parse_requirements() {
   # :command.fixed_flags_filter
   while [[ $# -gt 0 ]]; do
     case "${1:-}" in
       --help)
         long_usage=yes
-        keen_cli_request_usage
+        keencli_request_usage
         exit
         ;;
 
@@ -912,7 +912,7 @@ keen_cli_request_parse_requirements() {
 
   # :command.required_args_filter
   if [[ -z ${args['url_path']+x} ]]; then
-    printf "missing required argument: URL_PATH\nusage: keen-cli request URL_PATH [REQUEST_DATA] [OPTIONS]\n" >&2
+    printf "missing required argument: URL_PATH\nusage: keencli request URL_PATH [REQUEST_DATA] [OPTIONS]\n" >&2
     exit 1
   fi
 
@@ -950,8 +950,8 @@ run() {
   parse_requirements "${input[@]}"
 
   case "$action" in
-    "login") keen_cli_login_command ;;
-    "request") keen_cli_request_command ;;
+    "login") keencli_login_command ;;
+    "request") keencli_request_command ;;
   esac
 }
 

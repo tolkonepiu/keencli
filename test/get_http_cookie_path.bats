@@ -13,16 +13,17 @@ source "src/lib/http/get_http_cookie_path.sh"
 @test "if set all parameters" {
   run get_http_cookie_path localhost 80
   [ "$status" -eq 0 ]
-  [[ "$output" =~ keenclient-localhost:80.cookie$ ]]
+  [[ "$output" =~ keencli-localhost:80.cookie$ ]]
 }
 
 @test "without port" {
   run get_http_cookie_path localhost
   [ "$status" -eq 0 ]
-  [[ "$output" =~ keenclient-localhost.cookie$ ]]
+  [[ "$output" =~ keencli-localhost.cookie$ ]]
 }
 
 @test "check idempotency" {
   ARGS=(test test)
-  [ "$(get_http_cookie_path "${ARGS[@]}")" = "$(get_http_cookie_path "${ARGS[@]}")" ]
+  [ "$(get_http_cookie_path "${ARGS[@]}")" \
+    = "$(get_http_cookie_path "${ARGS[@]}")" ]
 }

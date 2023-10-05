@@ -1,5 +1,5 @@
 ---
-name: keen-cli
+name: keencli
 help: Keenetic command-line interface written in Bash
 version: 0.0.1
 
@@ -44,8 +44,8 @@ commands:
           - https
 
     examples:
-      - keenclient login --host 192.168.0.1 --port 8080
-      - keenclient login -s https --host myrouter01.keenetic.link
+      - keencli login --host 192.168.0.1 --port 8080
+      - keencli login -s https --host myrouter01.keenetic.link
 
   - name: request
     help: Make a http-request to a Keenetic router
@@ -82,12 +82,12 @@ commands:
         help: Make the client more talkative
 
     examples:
-      - keenclient request /rci/
-      - keenclient request -p 8080 --verbose /rci/
-      - keenclient request -f yaml -o /tmp/dump /rci/
-      - keenclient request -s https --host myrouter01.keenetic.link /rci/
+      - keencli request /rci/
+      - keencli request -p 8080 --verbose /rci/
+      - keencli request -f yaml -o /tmp/dump /rci/
+      - keencli request -s https --host myrouter01.keenetic.link /rci/
       - >-
-        keenclient request
+        keencli request
         -s https
         --host
         myrouter01.keenetic.link
