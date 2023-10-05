@@ -369,7 +369,7 @@ function http_request() {
 
   if [[ -n "${request_data}" ]]; then
     ARGS+=(--json "${request_data}")
-  fi
+  fidd
 
   if [[ -n "${output_path}" ]]; then
     ARGS+=(-o "${output_path}")

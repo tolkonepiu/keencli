@@ -37,3 +37,24 @@ jobs:
         uses: reviewdog/action-shfmt@v1
         with:
           filter_mode: nofilter
+
+  bashly:
+    name: bashly
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🏗️ Setup bashly
+        run: gem install bashly -v 1.1.0
+      - name: ⤵️ Check out code
+        uses: actions/checkout@v4
+      - name: 🚀 Run bashly
+        run: bashly generate
+      - name: Checks if there are any uncommitted changes
+        run: |
+          clean=$(git status | grep "nothing to commit")
+          if [ -z "$clean" ]; then
+              echo "There are uncommitted changes"
+               git --no-pager diff
+              exit 1
+          else
+              echo "Branch is clean"
+          fi
