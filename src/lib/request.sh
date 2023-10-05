@@ -35,3 +35,8 @@ function request() {
 
   log "Request successful, status_code: ${status_code}" "${verbose}"
 }
+
+
+
+
+

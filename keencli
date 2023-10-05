@@ -12,7 +12,7 @@ fi
 
 # :command.version_command
 version_command() {
-  echo "$version"
+       echo "$version"
 }
 
 # :command.usage
