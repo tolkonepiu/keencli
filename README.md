@@ -39,13 +39,14 @@ keencli <command> <subcommand> --help
 
 To get the version of the keencli:
 
-```
+```sh
 keencli --version
 ```
 
 ## Install Bash completions
 
-Set up autocomplete in bash into the current shell, bash-completion package should be installed first:
+Set up autocomplete in bash into the current shell,
+bash-completion package should be installed first:
 
 ```sh
 source <(keencli completions)
