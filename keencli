@@ -90,7 +90,7 @@ keencli_request_usage() {
     # :command.usage_flags
     # :flag.usage
     printf "  %s\n" "--baseurl BASEURL"
-    printf "    Keenetic base URL\n"
+    printf "    Keenetic base URL (example \`http://192.168.1.1\`,\n    \`https://myrouter01.keenetic.link\`)\n"
     printf "    Default: http://192.168.1.1\n"
     echo
 
@@ -194,7 +194,7 @@ keencli_show_system_usage() {
     # :command.usage_flags
     # :flag.usage
     printf "  %s\n" "--baseurl BASEURL"
-    printf "    Keenetic base URL\n"
+    printf "    Keenetic base URL (example \`http://192.168.1.1\`,\n    \`https://myrouter01.keenetic.link\`)\n"
     printf "    Default: http://192.168.1.1\n"
     echo
 
@@ -251,7 +251,7 @@ keencli_show_interface_usage() {
     # :command.usage_flags
     # :flag.usage
     printf "  %s\n" "--baseurl BASEURL"
-    printf "    Keenetic base URL\n"
+    printf "    Keenetic base URL (example \`http://192.168.1.1\`,\n    \`https://myrouter01.keenetic.link\`)\n"
     printf "    Default: http://192.168.1.1\n"
     echo
 
@@ -346,7 +346,7 @@ keencli_show_ip_hotspot_usage() {
     # :command.usage_flags
     # :flag.usage
     printf "  %s\n" "--baseurl BASEURL"
-    printf "    Keenetic base URL\n"
+    printf "    Keenetic base URL (example \`http://192.168.1.1\`,\n    \`https://myrouter01.keenetic.link\`)\n"
     printf "    Default: http://192.168.1.1\n"
     echo
 
@@ -402,7 +402,7 @@ keencli_show_internet_usage() {
     # :command.usage_flags
     # :flag.usage
     printf "  %s\n" "--baseurl BASEURL"
-    printf "    Keenetic base URL\n"
+    printf "    Keenetic base URL (example \`http://192.168.1.1\`,\n    \`https://myrouter01.keenetic.link\`)\n"
     printf "    Default: http://192.168.1.1\n"
     echo
 
@@ -577,7 +577,7 @@ function http_command() {
   output="${4:-/dev/stdout}"
   format="${5}"
 
-  login "${baseurl}"
+  http_login "${baseurl}"
 
   debug "Trying ${baseurl}..."
 
@@ -612,7 +612,7 @@ function http_command() {
 
 # src/lib/http/http_login.sh
 # shellcheck shell=bash
-function login() {
+function http_login() {
   local baseurl login password
   baseurl="${1:?baseurl must be set}"
   login="${KEENETIC_USERNAME:?KEENETIC_USERNAME env must be set}"
@@ -648,7 +648,7 @@ function login() {
       "${x_ndm_challenge}"
   )
 
-  log "Log in to ${baseurl}..."
+  debug "Log in to ${baseurl}..."
   if ! result=$(
     http_request_ohir \
       "${baseurl}" \
@@ -698,6 +698,17 @@ function http_request() {
 # request with only headers in response
 function http_request_ohir() {
   http_request "${1}" "${2}" "${3}" "/dev/null"
+}
+
+# src/lib/validations/validate_baseurl.sh
+# shellcheck shell=bash
+
+baseurl_regex="^https?:\/\/((([0-9]{1,3}\.){3}[0-9]{1,3})|([a-zA-Z0-9.-]+(\.[a-zA-Z]{2,4}){1,2}))(:[0-9]+)?$"
+
+validate_baseurl() {
+  if [[ ! "${1}" =~ ${baseurl_regex} ]]; then
+    echo "Invalid base URL, please see examples"
+  fi
 }
 
 # src/lib/validations/validate_file_path.sh
@@ -954,6 +965,11 @@ keencli_request_parse_requirements() {
 
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
+          # :flag.validations
+          if [[ -n $(validate_baseurl "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_baseurl "$2")" >&2
+            exit 1
+          fi
 
           args['--baseurl']="$2"
           shift
@@ -1165,6 +1181,11 @@ keencli_show_system_parse_requirements() {
 
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
+          # :flag.validations
+          if [[ -n $(validate_baseurl "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_baseurl "$2")" >&2
+            exit 1
+          fi
 
           args['--baseurl']="$2"
           shift
@@ -1278,6 +1299,11 @@ keencli_show_interface_parse_requirements() {
 
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
+          # :flag.validations
+          if [[ -n $(validate_baseurl "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_baseurl "$2")" >&2
+            exit 1
+          fi
 
           args['--baseurl']="$2"
           shift
@@ -1462,6 +1488,11 @@ keencli_show_ip_hotspot_parse_requirements() {
 
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
+          # :flag.validations
+          if [[ -n $(validate_baseurl "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_baseurl "$2")" >&2
+            exit 1
+          fi
 
           args['--baseurl']="$2"
           shift
@@ -1571,6 +1602,11 @@ keencli_show_internet_parse_requirements() {
 
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
+          # :flag.validations
+          if [[ -n $(validate_baseurl "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_baseurl "$2")" >&2
+            exit 1
+          fi
 
           args['--baseurl']="$2"
           shift
@@ -1646,7 +1682,7 @@ keencli_show_internet_parse_requirements() {
 
 # :command.initialize
 initialize() {
-  version="0.1.0"
+  version="0.1.1"
   long_usage=''
   set -e
 

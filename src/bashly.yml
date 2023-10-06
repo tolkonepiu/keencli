@@ -1,7 +1,7 @@
 ---
 name: keencli
 help: Keenetic command-line interface written in Bash
-version: 0.1.0
+version: 0.1.1
 
 dependencies:
   curl: https://curl.se/
@@ -36,8 +36,11 @@ commands:
       - &baseurl
         long: --baseurl
         arg: baseurl
-        help: Keenetic base URL
+        help: >
+          Keenetic base URL (example `http://192.168.1.1`,
+          `https://myrouter01.keenetic.link`)
         default: http://192.168.1.1
+        validate: baseurl
       - &output
         long: --output
         short: -o
