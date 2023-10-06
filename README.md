@@ -29,6 +29,12 @@ An keencli command has the following structure:
 keencli <command> <subcommand> [options and parameters]
 ```
 
+For example, to view system information, the command would be:
+
+```sh
+keencli show system
+```
+
 To view help documentation, use one of the following:
 
 ```sh
@@ -41,6 +47,12 @@ To get the version of the keencli:
 
 ```sh
 keencli --version
+```
+
+To turn on debugging output:
+
+```sh
+DEBUG=1 keencli <command> <subcommand>
 ```
 
 ## Development

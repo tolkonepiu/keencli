@@ -4,6 +4,8 @@ load test_helper.bash
 
 # shellcheck source=../src/lib/functions/calculate_hash.sh
 source "src/lib/functions/calculate_hash.sh"
+# shellcheck source=../src/lib/functions/md5_hash.sh
+source "src/lib/functions/md5_hash.sh"
 
 setup() {
   deps[md5]=$(which md5sum)

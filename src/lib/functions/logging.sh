@@ -5,7 +5,11 @@ function error() {
 }
 
 function log() {
-  [[ "$2" ]] &&
-    echo -e "($(date +'%Y-%m-%dT%H:%M:%S')) $1" >&2
+  echo -e "($(date +'%Y-%m-%dT%H:%M:%S')) $1" >&2
+}
+
+function debug() {
+  [[ "$DEBUG" ]] &&
+    echo -e "($(date +'%Y-%m-%dT%H:%M:%S')) DEBUG: $1" >&2
   return 0
 }

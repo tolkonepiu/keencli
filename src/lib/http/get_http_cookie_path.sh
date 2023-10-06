@@ -1,9 +1,8 @@
 # shellcheck shell=bash
 function get_http_cookie_path() {
-  local host port
+  local baseurl
 
-  host="${1:?host must be set}"
-  port="${2}"
+  baseurl="${1:?baseurl must be set}"
 
-  echo "${TMPDIR:-/tmp/}keencli-${host}${port:+:$port}.cookie"
+  echo "${TMPDIR:-/tmp/}keencli-$(md5_hash "${baseurl}").cookie"
 }

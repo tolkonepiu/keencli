@@ -34,8 +34,8 @@ keencli_usage() {
   echo
   # :command.usage_commands
   printf "%s\n" "Commands:"
-  printf "  %s   Log in to a Keenetic router\n" "login  "
-  printf "  %s   Make a http-request to a Keenetic router\n" "request"
+  printf "  %s   Make an http-request to the Keenetic router\n" "request"
+  printf "  %s   Show various diagnostic information\n" "show   "
   echo
 
   # :command.long_usage
@@ -67,74 +67,20 @@ keencli_usage() {
 }
 
 # :command.usage
-keencli_login_usage() {
-  if [[ -n $long_usage ]]; then
-    printf "keencli login - Log in to a Keenetic router\n"
-    echo
-
-  else
-    printf "keencli login - Log in to a Keenetic router\n"
-    echo
-
-  fi
-
-  printf "%s\n" "Usage:"
-  printf "  keencli login [OPTIONS]\n"
-  printf "  keencli login --help\n"
-  echo
-
-  # :command.long_usage
-  if [[ -n $long_usage ]]; then
-    printf "%s\n" "Options:"
-
-    # :command.usage_flags
-    # :flag.usage
-    printf "  %s\n" "--host, -h HOST"
-    printf "    Host name\n"
-    printf "    Default: 192.168.1.1\n"
-    echo
-
-    # :flag.usage
-    printf "  %s\n" "--port, -p PORT"
-    printf "    Port number\n"
-    echo
-
-    # :flag.usage
-    printf "  %s\n" "--scheme, -s SCHEME"
-    printf "    URL scheme\n"
-    printf "    Allowed: http, https\n"
-    printf "    Default: http\n"
-    echo
-
-    # :command.usage_fixed_flags
-    printf "  %s\n" "--help"
-    printf "    Show this help\n"
-    echo
-
-    # :command.usage_examples
-    printf "%s\n" "Examples:"
-    printf "  keencli login --host 192.168.0.1 --port 8080\n"
-    printf "  keencli login -s https --host myrouter01.keenetic.link\n"
-    echo
-
-  fi
-}
-
-# :command.usage
 keencli_request_usage() {
   if [[ -n $long_usage ]]; then
-    printf "keencli request - Make a http-request to a Keenetic router\n"
+    printf "keencli request - Make an http-request to the Keenetic router\n"
     echo
 
   else
-    printf "keencli request - Make a http-request to a Keenetic router\n"
+    printf "keencli request - Make an http-request to the Keenetic router\n"
     echo
 
   fi
 
   printf "%s\n" "Usage:"
   printf "  keencli request URL_PATH [REQUEST_DATA] [OPTIONS]\n"
-  printf "  keencli request --help\n"
+  printf "  keencli request --help | -h\n"
   echo
 
   # :command.long_usage
@@ -143,21 +89,9 @@ keencli_request_usage() {
 
     # :command.usage_flags
     # :flag.usage
-    printf "  %s\n" "--host, -h HOST"
-    printf "    Host name\n"
-    printf "    Default: 192.168.1.1\n"
-    echo
-
-    # :flag.usage
-    printf "  %s\n" "--port, -p PORT"
-    printf "    Port number\n"
-    echo
-
-    # :flag.usage
-    printf "  %s\n" "--scheme, -s SCHEME"
-    printf "    URL scheme\n"
-    printf "    Allowed: http, https\n"
-    printf "    Default: http\n"
+    printf "  %s\n" "--baseurl BASEURL"
+    printf "    Keenetic base URL\n"
+    printf "    Default: http://192.168.1.1\n"
     echo
 
     # :flag.usage
@@ -171,13 +105,8 @@ keencli_request_usage() {
     printf "    Allowed: json, yaml, xml, props\n"
     echo
 
-    # :flag.usage
-    printf "  %s\n" "--verbose"
-    printf "    Make the client more talkative\n"
-    echo
-
     # :command.usage_fixed_flags
-    printf "  %s\n" "--help"
+    printf "  %s\n" "--help, -h"
     printf "    Show this help\n"
     echo
 
@@ -197,10 +126,301 @@ keencli_request_usage() {
     # :command.usage_examples
     printf "%s\n" "Examples:"
     printf "  keencli request /rci/\n"
-    printf "  keencli request -p 8080 --verbose /rci/\n"
     printf "  keencli request -f yaml -o /tmp/dump /rci/\n"
-    printf "  keencli request -s https --host myrouter01.keenetic.link /rci/\n"
-    printf "  keencli request -s https --host myrouter01.keenetic.link /rci/\n  '[{\"show\":{\"interface\":{}}}]'\n"
+    printf "  keencli request --baseurl https://myrouter01.keenetic.link /rci/\n"
+    printf "  keencli request --baseurl https://myrouter01.keenetic.link:8080 /rci/\n  '[{\"show\":{\"interface\":{}}}]'\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+keencli_show_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "keencli show - Show various diagnostic information\n"
+    echo
+
+  else
+    printf "keencli show - Show various diagnostic information\n"
+    echo
+
+  fi
+
+  printf "%s\n" "Usage:"
+  printf "  keencli show COMMAND\n"
+  printf "  keencli show [COMMAND] --help | -h\n"
+  echo
+  # :command.usage_commands
+  printf "%s\n" "Commands:"
+  printf "  %s   Show system status information\n" "system   "
+  printf "  %s   Show interface status\n" "interface"
+  printf "  %s   Show IP information\n" "ip       "
+  printf "  %s   Show Internet check status\n" "internet "
+  echo
+
+  # :command.long_usage
+  if [[ -n $long_usage ]]; then
+    printf "%s\n" "Options:"
+
+    # :command.usage_fixed_flags
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+keencli_show_system_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "keencli show system - Show system status information\n"
+    echo
+
+  else
+    printf "keencli show system - Show system status information\n"
+    echo
+
+  fi
+
+  printf "%s\n" "Usage:"
+  printf "  keencli show system [SUBCOMMAND] [OPTIONS]\n"
+  printf "  keencli show system --help | -h\n"
+  echo
+
+  # :command.long_usage
+  if [[ -n $long_usage ]]; then
+    printf "%s\n" "Options:"
+
+    # :command.usage_flags
+    # :flag.usage
+    printf "  %s\n" "--baseurl BASEURL"
+    printf "    Keenetic base URL\n"
+    printf "    Default: http://192.168.1.1\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--output, -o OUTPUT"
+    printf "    Write to file instead of stdout\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--format, -f FORMAT"
+    printf "\n"
+    printf "    Allowed: json, yaml, xml, props\n"
+    printf "    Default: yaml\n"
+    echo
+
+    # :command.usage_fixed_flags
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
+    echo
+
+    # :command.usage_args
+    printf "%s\n" "Arguments:"
+
+    # :argument.usage
+    printf "  %s\n" "SUBCOMMAND"
+    printf "    Subcommands:\n      caption - show system caption\n      country - show system country\n      cpustat - show system CPU status\n      debug   - show system debug status\n      mode    - show system mode status\n      zram    - show system zram swap status\n"
+    printf "    Allowed: caption, country, cpustat, debug, mode, zram\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+keencli_show_interface_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "keencli show interface - Show interface status\n"
+    echo
+
+  else
+    printf "keencli show interface - Show interface status\n"
+    echo
+
+  fi
+
+  printf "%s\n" "Usage:"
+  printf "  keencli show interface [INTERFACE_NAME] [SUBCOMMAND] [OPTIONS]\n"
+  printf "  keencli show interface --help | -h\n"
+  echo
+
+  # :command.long_usage
+  if [[ -n $long_usage ]]; then
+    printf "%s\n" "Options:"
+
+    # :command.usage_flags
+    # :flag.usage
+    printf "  %s\n" "--baseurl BASEURL"
+    printf "    Keenetic base URL\n"
+    printf "    Default: http://192.168.1.1\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--output, -o OUTPUT"
+    printf "    Write to file instead of stdout\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--format, -f FORMAT"
+    printf "\n"
+    printf "    Allowed: json, yaml, xml, props\n"
+    printf "    Default: yaml\n"
+    echo
+
+    # :command.usage_fixed_flags
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
+    echo
+
+    # :command.usage_args
+    printf "%s\n" "Arguments:"
+
+    # :argument.usage
+    printf "  %s\n" "INTERFACE_NAME"
+    printf "    Interface name (example \`GigabitEthernet0\`)\n"
+    echo
+
+    # :argument.usage
+    printf "  %s\n" "SUBCOMMAND"
+    printf "    Subcommands:\n      stat - show interface statistics\n"
+    printf "    Allowed: stat\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+keencli_show_ip_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "keencli show ip - Show IP information\n"
+    echo
+
+  else
+    printf "keencli show ip - Show IP information\n"
+    echo
+
+  fi
+
+  printf "%s\n" "Usage:"
+  printf "  keencli show ip COMMAND\n"
+  printf "  keencli show ip [COMMAND] --help | -h\n"
+  echo
+  # :command.usage_commands
+  printf "%s\n" "Commands:"
+  printf "  %s   Show hotspot hosts\n" "hotspot"
+  echo
+
+  # :command.long_usage
+  if [[ -n $long_usage ]]; then
+    printf "%s\n" "Options:"
+
+    # :command.usage_fixed_flags
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+keencli_show_ip_hotspot_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "keencli show ip hotspot - Show hotspot hosts\n"
+    echo
+
+  else
+    printf "keencli show ip hotspot - Show hotspot hosts\n"
+    echo
+
+  fi
+
+  printf "%s\n" "Usage:"
+  printf "  keencli show ip hotspot [MAC_ADDRESS] [OPTIONS]\n"
+  printf "  keencli show ip hotspot --help | -h\n"
+  echo
+
+  # :command.long_usage
+  if [[ -n $long_usage ]]; then
+    printf "%s\n" "Options:"
+
+    # :command.usage_flags
+    # :flag.usage
+    printf "  %s\n" "--baseurl BASEURL"
+    printf "    Keenetic base URL\n"
+    printf "    Default: http://192.168.1.1\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--output, -o OUTPUT"
+    printf "    Write to file instead of stdout\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--format, -f FORMAT"
+    printf "\n"
+    printf "    Allowed: json, yaml, xml, props\n"
+    printf "    Default: yaml\n"
+    echo
+
+    # :command.usage_fixed_flags
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
+    echo
+
+    # :command.usage_args
+    printf "%s\n" "Arguments:"
+
+    # :argument.usage
+    printf "  %s\n" "MAC_ADDRESS"
+    printf "    MAC address (example \`b0:c2:b9:aa:0d:dd\`)\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+keencli_show_internet_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "keencli show internet - Show Internet check status\n"
+    echo
+
+  else
+    printf "keencli show internet - Show Internet check status\n"
+    echo
+
+  fi
+
+  printf "%s\n" "Usage:"
+  printf "  keencli show internet [OPTIONS]\n"
+  printf "  keencli show internet --help | -h\n"
+  echo
+
+  # :command.long_usage
+  if [[ -n $long_usage ]]; then
+    printf "%s\n" "Options:"
+
+    # :command.usage_flags
+    # :flag.usage
+    printf "  %s\n" "--baseurl BASEURL"
+    printf "    Keenetic base URL\n"
+    printf "    Default: http://192.168.1.1\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--output, -o OUTPUT"
+    printf "    Write to file instead of stdout\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--format, -f FORMAT"
+    printf "\n"
+    printf "    Allowed: json, yaml, xml, props\n"
+    printf "    Default: yaml\n"
+    echo
+
+    # :command.usage_fixed_flags
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
     echo
 
   fi
@@ -260,7 +480,7 @@ inspect_args() {
 
 # :command.user_lib
 # src/lib/functions/calculate_hash.sh
-# shellcheck shell=bash disable=SC2154
+# shellcheck shell=bash
 function calculate_hash() {
   local login password x_ndm_realm x_ndm_challenge
 
@@ -270,7 +490,7 @@ function calculate_hash() {
   x_ndm_challenge=${4:?x_ndm_challenge must be set}
 
   md5string="${login}:${x_ndm_realm}:${password}"
-  md5hash=$(echo -n "$md5string" | "${deps[md5]}" | awk '{print $1}')
+  md5hash=$(md5_hash "$md5string")
   sha256string="$x_ndm_challenge$md5hash"
   echo -n "$sha256string" | shasum -a 256 | awk '{print $1}'
 }
@@ -299,31 +519,29 @@ function error() {
 }
 
 function log() {
-  [[ "$2" ]] &&
-    echo -e "($(date +'%Y-%m-%dT%H:%M:%S')) $1" >&2
+  echo -e "($(date +'%Y-%m-%dT%H:%M:%S')) $1" >&2
+}
+
+function debug() {
+  [[ "$DEBUG" ]] &&
+    echo -e "($(date +'%Y-%m-%dT%H:%M:%S')) DEBUG: $1" >&2
   return 0
 }
 
-# src/lib/http/get_http_base_url.sh
-# shellcheck shell=bash
-function get_http_base_url() {
-  local scheme host port
-  scheme="${1:?scheme must be set}"
-  host="${2:?host must be set}"
-  port="${3}"
-
-  echo "${scheme}://${host}${port:+:$port}"
+# src/lib/functions/md5_hash.sh
+# shellcheck shell=bash disable=SC2154
+function md5_hash() {
+  echo -n "$1" | "${deps[md5]}" | awk '{print $1}'
 }
 
 # src/lib/http/get_http_cookie_path.sh
 # shellcheck shell=bash
 function get_http_cookie_path() {
-  local host port
+  local baseurl
 
-  host="${1:?host must be set}"
-  port="${2}"
+  baseurl="${1:?baseurl must be set}"
 
-  echo "${TMPDIR:-/tmp/}keencli-${host}${port:+:$port}.cookie"
+  echo "${TMPDIR:-/tmp/}keencli-$(md5_hash "${baseurl}").cookie"
 }
 
 # src/lib/http/get_http_header_value.sh
@@ -346,24 +564,119 @@ function get_http_status_code() {
   local response
   response="${1:?response must be set}"
 
-  echo "$response" | head -n 1 | grep -e "^HTTP" | awk '{print $2}'
+  echo "$response" | head -n 1 | grep -e "^HTTP" | awk -F " " '{print $2}'
+}
+
+# src/lib/http/http_command.sh
+# shellcheck shell=bash
+function http_command() {
+  local baseurl url_path request_data output
+  baseurl="${1:?baseurl must be set}"
+  url_path="${2}"
+  request_data="${3}"
+  output="${4:-/dev/stdout}"
+  format="${5}"
+
+  login "${baseurl}"
+
+  debug "Trying ${baseurl}..."
+
+  data_path=$(mktemp)
+
+  if ! result=$(
+    http_request \
+      "${baseurl}" \
+      "${url_path}" \
+      "${request_data}" \
+      "${data_path}"
+  ); then
+    error "Request failed, $result"
+  fi
+
+  status_code=$(get_http_status_code "$result")
+  [[ "$status_code" != 2* ]] &&
+    error "Request failed${status_code:+, status_code: ${status_code}}"
+
+  debug "Request successful, status_code: ${status_code}"
+
+  if [[ -n "${format}" ]]; then
+    if ! convert_json_to "${format}" <"${data_path}" >"${output}"; then
+      error "Response conversion error"
+    fi
+  else
+    cat "${data_path}" >"${output}"
+  fi
+
+  rm "${data_path}"
+}
+
+# src/lib/http/http_login.sh
+# shellcheck shell=bash
+function login() {
+  local baseurl login password
+  baseurl="${1:?baseurl must be set}"
+  login="${KEENETIC_USERNAME:?KEENETIC_USERNAME env must be set}"
+  password="${KEENETIC_PASSWORD:?KEENETIC_PASSWORD env must be set}"
+
+  if ! result=$(
+    http_request_ohir \
+      "${baseurl}" \
+      "/auth"
+  ); then
+    error "Login failed, $result"
+  fi
+
+  status_code=$(get_http_status_code "$result")
+  [[ "$status_code" -eq 200 ]] &&
+    debug "Already logged in" &&
+    return 0
+
+  [[ "$status_code" -ne 401 ]] &&
+    error "Login failed${status_code:+, status_code: ${status_code}}"
+
+  x_ndm_realm=$(get_http_header_value "x-ndm-realm" "${result}")
+  x_ndm_challenge=$(get_http_header_value "x-ndm-challenge" "${result}")
+
+  [[ -z "$x_ndm_realm" || -z "$x_ndm_challenge" ]] &&
+    error "Login failed, required headers not found"
+
+  hash=$(
+    calculate_hash \
+      "${login}" \
+      "${password}" \
+      "${x_ndm_realm}" \
+      "${x_ndm_challenge}"
+  )
+
+  log "Log in to ${baseurl}..."
+  if ! result=$(
+    http_request_ohir \
+      "${baseurl}" \
+      "/auth" \
+      "{\"login\":\"${login}\",\"password\":\"$hash\"}"
+  ); then
+    error "Login failed, $result"
+  fi
+
+  status_code=$(get_http_status_code "$result")
+  [[ "$status_code" -ne 200 ]] &&
+    error "Login failed${status_code:+, status_code: ${status_code}}"
+
+  debug "Login successful"
 }
 
 # src/lib/http/http_request.sh
 # shellcheck shell=bash
 function http_request() {
-  local host port scheme url_path request_data \
-    output_path base_url cookie_path
+  local baseurl url_path request_data \
+    output_path cookie_path
 
-  host="${1:?host must be set}"
-  port="${2}"
-  scheme="${3:?scheme must be set}"
-  url_path="${4:?url path must be set}"
-  request_data="${5}"
-  output_path="${6}"
+  baseurl="${1:?baseurl must be set}"
+  url_path="${2:?url path must be set}"
+  request_data="${3}"
+  output_path="${4}"
 
-  base_url=$(get_http_base_url "${scheme}" "${host}" "${port}")
-  cookie_path=$(get_http_cookie_path "${host}" "${port}")
+  cookie_path=$(get_http_cookie_path "${baseurl}")
 
   ARGS=(-sS -D -)
 
@@ -377,116 +690,14 @@ function http_request() {
 
   curl 2>&1 \
     "${ARGS[@]}" \
-    "${base_url}${url_path}" \
+    "${baseurl}${url_path}" \
     --cookie "${cookie_path}" \
     --cookie-jar "${cookie_path}"
 }
 
 # request with only headers in response
 function http_request_ohir() {
-  http_request "${1}" "${2}" "${3}" "${4}" "${5}" "/dev/null"
-}
-
-# src/lib/login.sh
-# shellcheck shell=bash
-function login() {
-  local host port scheme verbose login password response
-  host="${1:?host must be set}"
-  port="${2}"
-  scheme="${3:?scheme must be set}"
-  verbose="${4}"
-  login="${5:?login must be set}"
-  password="${6:?password must be set}"
-
-  if ! response=$(
-    http_request_ohir \
-      "${host}" \
-      "${port}" \
-      "${scheme}" \
-      "/auth"
-  ); then
-    error "Login failed, $response"
-  fi
-
-  status_code=$(get_http_status_code "$response")
-  [[ "$status_code" -eq 200 ]] &&
-    log "Already logged in" "${verbose}" &&
-    return 0
-
-  [[ "$status_code" -ne 401 ]] &&
-    error "Login failed${status_code:+, status_code: ${status_code}}"
-
-  x_ndm_realm=$(get_http_header_value "x-ndm-realm" "${response}")
-  x_ndm_challenge=$(get_http_header_value "x-ndm-challenge" "${response}")
-
-  [[ -z "$x_ndm_realm" || -z "$x_ndm_challenge" ]] &&
-    error "Login failed, required headers not found"
-
-  hash=$(
-    calculate_hash \
-      "${login}" \
-      "${password}" \
-      "${x_ndm_realm}" \
-      "${x_ndm_challenge}"
-  )
-
-  log "Log in to ${host}..." "${verbose}"
-
-  if ! response=$(
-    http_request_ohir \
-      "${host}" \
-      "${port}" \
-      "${scheme}" \
-      "/auth" \
-      "{\"login\":\"${login}\",\"password\":\"$hash\"}"
-  ); then
-    error "Login failed, $response"
-  fi
-
-  status_code=$(get_http_status_code "$response")
-  [[ "$status_code" -ne 200 ]] &&
-    error "Login failed${status_code:+, status_code: ${status_code}}"
-
-  log "Login successful" "${verbose}"
-}
-
-# src/lib/request.sh
-# shellcheck shell=bash
-function request() {
-  local host port scheme url_path request_data output \
-    verbose login password response
-  host="${1:?host must be set}"
-  port="${2}"
-  scheme="${3:?scheme must be set}"
-  url_path="${4}"
-  request_data="${5}"
-  output="${6}"
-  verbose="${7}"
-  login="${8:?login must be set}"
-  password="${9:?password must be set}"
-
-  login "${host}" "${port}" "${scheme}" "${verbose}" \
-    "${login}" "${password}"
-
-  log "Trying ${host}..." "${verbose}"
-
-  if ! response=$(
-    http_request \
-      "${host}" \
-      "${port}" \
-      "${scheme}" \
-      "${url_path}" \
-      "${request_data}" \
-      "${output}"
-  ); then
-    error "Request failed, $response"
-  fi
-
-  status_code=$(get_http_status_code "$response")
-  [[ "$status_code" != 2* ]] &&
-    error "Request failed${status_code:+, status_code: ${status_code}}"
-
-  log "Request successful, status_code: ${status_code}" "${verbose}"
+  http_request "${1}" "${2}" "${3}" "/dev/null"
 }
 
 # src/lib/validations/validate_file_path.sh
@@ -507,50 +718,95 @@ validate_json() {
 
 # :command.command_functions
 # :command.function
-keencli_login_command() {
-  # src/login_command.sh
-  # shellcheck shell=bash disable=SC2154 disable=SC2168
-  local host port scheme login password
-  host="${args[--host]}"
-  port="${args[--port]}"
-  scheme="${args[--scheme]}"
-  login="${KEENETIC_USERNAME:?KEENETIC_USERNAME env must be set}"
-  password="${KEENETIC_PASSWORD:?KEENETIC_PASSWORD env must be set}"
-
-  login "${host}" "${port}" "${scheme}" "1" "${login}" "${password}"
+keencli_request_command() {
+  # src/request_command.sh
+  # shellcheck shell=bash disable=SC2154
+  http_command \
+    "${args[--baseurl]}" \
+    "${args[url_path]}" \
+    "${args[request_data]}" \
+    "${args[--output]}" \
+    "${args[--format]}"
 
 }
 
 # :command.function
-keencli_request_command() {
-  # src/request_command.sh
-  # shellcheck shell=bash disable=SC2154 disable=SC2168
-  local host port scheme verbose url_path request_data login password
-  host="${args[--host]}"
-  port="${args[--port]}"
-  scheme="${args[--scheme]}"
-  output="${args[--output]:-/dev/stdout}"
-  format="${args[--format]}"
-  verbose="${args[--verbose]}"
-  url_path="${args[url_path]}"
-  request_data="${args[request_data]}"
-  login="${KEENETIC_USERNAME:?KEENETIC_USERNAME env must be set}"
-  password="${KEENETIC_PASSWORD:?KEENETIC_PASSWORD env must be set}"
+keencli_show_system_command() {
+  # src/show_system_command.sh
+  # shellcheck shell=bash disable=SC2154
+  url_path="/rci/show/system"
 
-  data_path=$(mktemp)
-
-  request "${host}" "${port}" "${scheme}" "${url_path}" \
-    "${request_data}" "${data_path}" "${verbose}" "${login}" "${password}"
-
-  if [[ -n "${format}" ]]; then
-    if ! convert_json_to "${format}" <"${data_path}" >"${output}"; then
-      error "Response conversion error"
-    fi
-  else
-    cat "${data_path}" >"${output}"
+  subcommand="${args[subcommand]}"
+  if [[ -n "${subcommand}" ]]; then
+    url_path="${url_path}/${subcommand}"
   fi
 
-  rm "${data_path}"
+  http_command \
+    "${args[--baseurl]}" \
+    "${url_path}" \
+    "${args[request_data]}" \
+    "${args[--output]}" \
+    "${args[--format]}"
+
+}
+
+# :command.function
+keencli_show_interface_command() {
+  # src/show_interface_command.sh
+  # shellcheck shell=bash disable=SC2154
+  url_path="/rci/show/interface"
+
+  subcommand="${args[subcommand]}"
+  if [[ -n "${subcommand}" ]]; then
+    url_path="${url_path}/${subcommand}"
+  fi
+
+  interface_name="${args[interface_name]}"
+  if [[ -n "${interface_name}" ]]; then
+    url_path="${url_path}?name=${interface_name}"
+  fi
+
+  http_command \
+    "${args[--baseurl]}" \
+    "${url_path}" \
+    "${args[request_data]}" \
+    "${args[--output]}" \
+    "${args[--format]}"
+
+}
+
+# :command.function
+keencli_show_ip_hotspot_command() {
+  # src/show_ip_hotspot_command.sh
+  # shellcheck shell=bash disable=SC2154
+  url_path="/rci/show/ip/hotspot"
+
+  mac_address="${args[mac_address]}"
+  if [[ -n "${mac_address}" ]]; then
+    url_path="${url_path}?mac=${mac_address}"
+  fi
+
+  http_command \
+    "${args[--baseurl]}" \
+    "${url_path}" \
+    "${args[request_data]}" \
+    "${args[--output]}" \
+    "${args[--format]}"
+
+}
+
+# :command.function
+keencli_show_internet_command() {
+  # src/show_internet_command.sh
+  # shellcheck shell=bash disable=SC2154
+  url_path="/rci/show/internet/status"
+
+  http_command \
+    "${args[--baseurl]}" \
+    "${url_path}" \
+    "${args[request_data]}" \
+    "${args[--output]}" \
+    "${args[--format]}"
 
 }
 
@@ -618,17 +874,17 @@ parse_requirements() {
   case $action in
     -*) ;;
 
-    login)
-      action="login"
-      shift
-      keencli_login_parse_requirements "$@"
-      shift $#
-      ;;
-
     request)
       action="request"
       shift
       keencli_request_parse_requirements "$@"
+      shift $#
+      ;;
+
+    show)
+      action="show"
+      shift
+      keencli_show_parse_requirements "$@"
       shift $#
       ;;
 
@@ -669,109 +925,11 @@ parse_requirements() {
 }
 
 # :command.parse_requirements
-keencli_login_parse_requirements() {
-  # :command.fixed_flags_filter
-  while [[ $# -gt 0 ]]; do
-    case "${1:-}" in
-      --help)
-        long_usage=yes
-        keencli_login_usage
-        exit
-        ;;
-
-      *)
-        break
-        ;;
-
-    esac
-  done
-
-  # :command.command_filter
-  action="login"
-
-  # :command.parse_requirements_while
-  while [[ $# -gt 0 ]]; do
-    key="$1"
-    case "$key" in
-      # :flag.case
-      --host | -h)
-
-        # :flag.case_arg
-        if [[ -n ${2+x} ]]; then
-
-          args['--host']="$2"
-          shift
-          shift
-        else
-          printf "%s\n" "--host requires an argument: --host, -h HOST" >&2
-          exit 1
-        fi
-        ;;
-
-      # :flag.case
-      --port | -p)
-
-        # :flag.case_arg
-        if [[ -n ${2+x} ]]; then
-
-          args['--port']="$2"
-          shift
-          shift
-        else
-          printf "%s\n" "--port requires an argument: --port, -p PORT" >&2
-          exit 1
-        fi
-        ;;
-
-      # :flag.case
-      --scheme | -s)
-
-        # :flag.case_arg
-        if [[ -n ${2+x} ]]; then
-
-          args['--scheme']="$2"
-          shift
-          shift
-        else
-          printf "%s\n" "--scheme requires an argument: --scheme, -s SCHEME" >&2
-          exit 1
-        fi
-        ;;
-
-      -?*)
-        printf "invalid option: %s\n" "$key" >&2
-        exit 1
-        ;;
-
-      *)
-        # :command.parse_requirements_case
-        # :command.parse_requirements_case_simple
-        printf "invalid argument: %s\n" "$key" >&2
-        exit 1
-
-        ;;
-
-    esac
-  done
-
-  # :command.default_assignments
-  [[ -n ${args['--host']:-} ]] || args['--host']="192.168.1.1"
-  [[ -n ${args['--scheme']:-} ]] || args['--scheme']="http"
-
-  # :command.whitelist_filter
-  if [[ ${args['--scheme']} ]] && [[ ! ${args['--scheme']} =~ ^(http|https)$ ]]; then
-    printf "%s\n" "--scheme must be one of: http, https" >&2
-    exit 1
-  fi
-
-}
-
-# :command.parse_requirements
 keencli_request_parse_requirements() {
   # :command.fixed_flags_filter
   while [[ $# -gt 0 ]]; do
     case "${1:-}" in
-      --help)
+      --help | -h)
         long_usage=yes
         keencli_request_usage
         exit
@@ -792,46 +950,16 @@ keencli_request_parse_requirements() {
     key="$1"
     case "$key" in
       # :flag.case
-      --host | -h)
+      --baseurl)
 
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
 
-          args['--host']="$2"
+          args['--baseurl']="$2"
           shift
           shift
         else
-          printf "%s\n" "--host requires an argument: --host, -h HOST" >&2
-          exit 1
-        fi
-        ;;
-
-      # :flag.case
-      --port | -p)
-
-        # :flag.case_arg
-        if [[ -n ${2+x} ]]; then
-
-          args['--port']="$2"
-          shift
-          shift
-        else
-          printf "%s\n" "--port requires an argument: --port, -p PORT" >&2
-          exit 1
-        fi
-        ;;
-
-      # :flag.case
-      --scheme | -s)
-
-        # :flag.case_arg
-        if [[ -n ${2+x} ]]; then
-
-          args['--scheme']="$2"
-          shift
-          shift
-        else
-          printf "%s\n" "--scheme requires an argument: --scheme, -s SCHEME" >&2
+          printf "%s\n" "--baseurl requires an argument: --baseurl BASEURL" >&2
           exit 1
         fi
         ;;
@@ -869,14 +997,6 @@ keencli_request_parse_requirements() {
           printf "%s\n" "--format requires an argument: --format, -f FORMAT" >&2
           exit 1
         fi
-        ;;
-
-      # :flag.case
-      --verbose)
-
-        # :flag.case_no_arg
-        args['--verbose']=1
-        shift
         ;;
 
       -?*)
@@ -917,12 +1037,208 @@ keencli_request_parse_requirements() {
   fi
 
   # :command.default_assignments
-  [[ -n ${args['--host']:-} ]] || args['--host']="192.168.1.1"
-  [[ -n ${args['--scheme']:-} ]] || args['--scheme']="http"
+  [[ -n ${args['--baseurl']:-} ]] || args['--baseurl']="http://192.168.1.1"
 
   # :command.whitelist_filter
-  if [[ ${args['--scheme']} ]] && [[ ! ${args['--scheme']} =~ ^(http|https)$ ]]; then
-    printf "%s\n" "--scheme must be one of: http, https" >&2
+  if [[ ${args['--format']} ]] && [[ ! ${args['--format']} =~ ^(json|yaml|xml|props)$ ]]; then
+    printf "%s\n" "--format must be one of: json, yaml, xml, props" >&2
+    exit 1
+  fi
+
+}
+
+# :command.parse_requirements
+keencli_show_parse_requirements() {
+  # :command.fixed_flags_filter
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+      --help | -h)
+        long_usage=yes
+        keencli_show_usage
+        exit
+        ;;
+
+      *)
+        break
+        ;;
+
+    esac
+  done
+
+  # :command.command_filter
+  action=${1:-}
+
+  case $action in
+    -*) ;;
+
+    system)
+      action="system"
+      shift
+      keencli_show_system_parse_requirements "$@"
+      shift $#
+      ;;
+
+    interface)
+      action="interface"
+      shift
+      keencli_show_interface_parse_requirements "$@"
+      shift $#
+      ;;
+
+    ip)
+      action="ip"
+      shift
+      keencli_show_ip_parse_requirements "$@"
+      shift $#
+      ;;
+
+    internet)
+      action="internet"
+      shift
+      keencli_show_internet_parse_requirements "$@"
+      shift $#
+      ;;
+
+    # :command.command_fallback
+    "")
+      keencli_show_usage >&2
+      exit 1
+      ;;
+
+    *)
+      printf "invalid command: %s\n" "$action" >&2
+      exit 1
+      ;;
+
+  esac
+
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+
+      -?*)
+        printf "invalid option: %s\n" "$key" >&2
+        exit 1
+        ;;
+
+      *)
+        # :command.parse_requirements_case
+        # :command.parse_requirements_case_simple
+        printf "invalid argument: %s\n" "$key" >&2
+        exit 1
+
+        ;;
+
+    esac
+  done
+
+}
+
+# :command.parse_requirements
+keencli_show_system_parse_requirements() {
+  # :command.fixed_flags_filter
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+      --help | -h)
+        long_usage=yes
+        keencli_show_system_usage
+        exit
+        ;;
+
+      *)
+        break
+        ;;
+
+    esac
+  done
+
+  # :command.command_filter
+  action="show system"
+
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+      # :flag.case
+      --baseurl)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+
+          args['--baseurl']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--baseurl requires an argument: --baseurl BASEURL" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --output | -o)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          # :flag.validations
+          if [[ -n $(validate_file_path "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--output, -o OUTPUT" "$(validate_file_path "$2")" >&2
+            exit 1
+          fi
+
+          args['--output']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--output requires an argument: --output, -o OUTPUT" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --format | -f)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+
+          args['--format']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--format requires an argument: --format, -f FORMAT" >&2
+          exit 1
+        fi
+        ;;
+
+      -?*)
+        printf "invalid option: %s\n" "$key" >&2
+        exit 1
+        ;;
+
+      *)
+        # :command.parse_requirements_case
+        # :command.parse_requirements_case_simple
+        if [[ -z ${args['subcommand']+x} ]]; then
+
+          args['subcommand']=$1
+          shift
+        else
+          printf "invalid argument: %s\n" "$key" >&2
+          exit 1
+        fi
+
+        ;;
+
+    esac
+  done
+
+  # :command.default_assignments
+  [[ -n ${args['--baseurl']:-} ]] || args['--baseurl']="http://192.168.1.1"
+  [[ -n ${args['--format']:-} ]] || args['--format']="yaml"
+
+  # :command.whitelist_filter
+  if [[ -n ${args['subcommand']} ]] && [[ ! ${args['subcommand']} =~ ^(caption|country|cpustat|debug|mode|zram)$ ]]; then
+    printf "%s\n" "subcommand must be one of: caption, country, cpustat, debug, mode, zram" >&2
     exit 1
   fi
   if [[ ${args['--format']} ]] && [[ ! ${args['--format']} =~ ^(json|yaml|xml|props)$ ]]; then
@@ -932,9 +1248,405 @@ keencli_request_parse_requirements() {
 
 }
 
+# :command.parse_requirements
+keencli_show_interface_parse_requirements() {
+  # :command.fixed_flags_filter
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+      --help | -h)
+        long_usage=yes
+        keencli_show_interface_usage
+        exit
+        ;;
+
+      *)
+        break
+        ;;
+
+    esac
+  done
+
+  # :command.command_filter
+  action="show interface"
+
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+      # :flag.case
+      --baseurl)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+
+          args['--baseurl']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--baseurl requires an argument: --baseurl BASEURL" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --output | -o)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          # :flag.validations
+          if [[ -n $(validate_file_path "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--output, -o OUTPUT" "$(validate_file_path "$2")" >&2
+            exit 1
+          fi
+
+          args['--output']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--output requires an argument: --output, -o OUTPUT" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --format | -f)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+
+          args['--format']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--format requires an argument: --format, -f FORMAT" >&2
+          exit 1
+        fi
+        ;;
+
+      -?*)
+        printf "invalid option: %s\n" "$key" >&2
+        exit 1
+        ;;
+
+      *)
+        # :command.parse_requirements_case
+        # :command.parse_requirements_case_simple
+        if [[ -z ${args['interface_name']+x} ]]; then
+
+          args['interface_name']=$1
+          shift
+        elif [[ -z ${args['subcommand']+x} ]]; then
+
+          args['subcommand']=$1
+          shift
+        else
+          printf "invalid argument: %s\n" "$key" >&2
+          exit 1
+        fi
+
+        ;;
+
+    esac
+  done
+
+  # :command.default_assignments
+  [[ -n ${args['--baseurl']:-} ]] || args['--baseurl']="http://192.168.1.1"
+  [[ -n ${args['--format']:-} ]] || args['--format']="yaml"
+
+  # :command.whitelist_filter
+  if [[ -n ${args['subcommand']} ]] && [[ ! ${args['subcommand']} =~ ^(stat)$ ]]; then
+    printf "%s\n" "subcommand must be one of: stat" >&2
+    exit 1
+  fi
+  if [[ ${args['--format']} ]] && [[ ! ${args['--format']} =~ ^(json|yaml|xml|props)$ ]]; then
+    printf "%s\n" "--format must be one of: json, yaml, xml, props" >&2
+    exit 1
+  fi
+
+}
+
+# :command.parse_requirements
+keencli_show_ip_parse_requirements() {
+  # :command.fixed_flags_filter
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+      --help | -h)
+        long_usage=yes
+        keencli_show_ip_usage
+        exit
+        ;;
+
+      *)
+        break
+        ;;
+
+    esac
+  done
+
+  # :command.command_filter
+  action=${1:-}
+
+  case $action in
+    -*) ;;
+
+    hotspot)
+      action="hotspot"
+      shift
+      keencli_show_ip_hotspot_parse_requirements "$@"
+      shift $#
+      ;;
+
+    # :command.command_fallback
+    "")
+      keencli_show_ip_usage >&2
+      exit 1
+      ;;
+
+    *)
+      printf "invalid command: %s\n" "$action" >&2
+      exit 1
+      ;;
+
+  esac
+
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+
+      -?*)
+        printf "invalid option: %s\n" "$key" >&2
+        exit 1
+        ;;
+
+      *)
+        # :command.parse_requirements_case
+        # :command.parse_requirements_case_simple
+        printf "invalid argument: %s\n" "$key" >&2
+        exit 1
+
+        ;;
+
+    esac
+  done
+
+}
+
+# :command.parse_requirements
+keencli_show_ip_hotspot_parse_requirements() {
+  # :command.fixed_flags_filter
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+      --help | -h)
+        long_usage=yes
+        keencli_show_ip_hotspot_usage
+        exit
+        ;;
+
+      *)
+        break
+        ;;
+
+    esac
+  done
+
+  # :command.command_filter
+  action="show ip hotspot"
+
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+      # :flag.case
+      --baseurl)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+
+          args['--baseurl']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--baseurl requires an argument: --baseurl BASEURL" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --output | -o)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          # :flag.validations
+          if [[ -n $(validate_file_path "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--output, -o OUTPUT" "$(validate_file_path "$2")" >&2
+            exit 1
+          fi
+
+          args['--output']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--output requires an argument: --output, -o OUTPUT" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --format | -f)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+
+          args['--format']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--format requires an argument: --format, -f FORMAT" >&2
+          exit 1
+        fi
+        ;;
+
+      -?*)
+        printf "invalid option: %s\n" "$key" >&2
+        exit 1
+        ;;
+
+      *)
+        # :command.parse_requirements_case
+        # :command.parse_requirements_case_simple
+        if [[ -z ${args['mac_address']+x} ]]; then
+
+          args['mac_address']=$1
+          shift
+        else
+          printf "invalid argument: %s\n" "$key" >&2
+          exit 1
+        fi
+
+        ;;
+
+    esac
+  done
+
+  # :command.default_assignments
+  [[ -n ${args['--baseurl']:-} ]] || args['--baseurl']="http://192.168.1.1"
+  [[ -n ${args['--format']:-} ]] || args['--format']="yaml"
+
+  # :command.whitelist_filter
+  if [[ ${args['--format']} ]] && [[ ! ${args['--format']} =~ ^(json|yaml|xml|props)$ ]]; then
+    printf "%s\n" "--format must be one of: json, yaml, xml, props" >&2
+    exit 1
+  fi
+
+}
+
+# :command.parse_requirements
+keencli_show_internet_parse_requirements() {
+  # :command.fixed_flags_filter
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+      --help | -h)
+        long_usage=yes
+        keencli_show_internet_usage
+        exit
+        ;;
+
+      *)
+        break
+        ;;
+
+    esac
+  done
+
+  # :command.command_filter
+  action="show internet"
+
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+      # :flag.case
+      --baseurl)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+
+          args['--baseurl']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--baseurl requires an argument: --baseurl BASEURL" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --output | -o)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          # :flag.validations
+          if [[ -n $(validate_file_path "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--output, -o OUTPUT" "$(validate_file_path "$2")" >&2
+            exit 1
+          fi
+
+          args['--output']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--output requires an argument: --output, -o OUTPUT" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --format | -f)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+
+          args['--format']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--format requires an argument: --format, -f FORMAT" >&2
+          exit 1
+        fi
+        ;;
+
+      -?*)
+        printf "invalid option: %s\n" "$key" >&2
+        exit 1
+        ;;
+
+      *)
+        # :command.parse_requirements_case
+        # :command.parse_requirements_case_simple
+        printf "invalid argument: %s\n" "$key" >&2
+        exit 1
+
+        ;;
+
+    esac
+  done
+
+  # :command.default_assignments
+  [[ -n ${args['--baseurl']:-} ]] || args['--baseurl']="http://192.168.1.1"
+  [[ -n ${args['--format']:-} ]] || args['--format']="yaml"
+
+  # :command.whitelist_filter
+  if [[ ${args['--format']} ]] && [[ ! ${args['--format']} =~ ^(json|yaml|xml|props)$ ]]; then
+    printf "%s\n" "--format must be one of: json, yaml, xml, props" >&2
+    exit 1
+  fi
+
+}
+
 # :command.initialize
 initialize() {
-  version="0.0.1"
+  version="0.1.0"
   long_usage=''
   set -e
 
@@ -950,8 +1662,13 @@ run() {
   parse_requirements "${input[@]}"
 
   case "$action" in
-    "login") keencli_login_command ;;
     "request") keencli_request_command ;;
+    "show") keencli_show_command ;;
+    "show system") keencli_show_system_command ;;
+    "show interface") keencli_show_interface_command ;;
+    "show ip") keencli_show_ip_command ;;
+    "show ip hotspot") keencli_show_ip_hotspot_command ;;
+    "show internet") keencli_show_internet_command ;;
   esac
 }
 
