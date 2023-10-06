@@ -37,7 +37,6 @@ commands:
         long: --baseurl
         arg: baseurl
         help: Keenetic base URL
-        required: true
         default: http://192.168.1.1
       - &output
         long: --output

@@ -91,6 +91,7 @@ keencli_request_usage() {
     # :flag.usage
     printf "  %s\n" "--baseurl BASEURL"
     printf "    Keenetic base URL\n"
+    printf "    Default: http://192.168.1.1\n"
     echo
 
     # :flag.usage
@@ -194,6 +195,7 @@ keencli_show_system_usage() {
     # :flag.usage
     printf "  %s\n" "--baseurl BASEURL"
     printf "    Keenetic base URL\n"
+    printf "    Default: http://192.168.1.1\n"
     echo
 
     # :flag.usage
@@ -250,6 +252,7 @@ keencli_show_interface_usage() {
     # :flag.usage
     printf "  %s\n" "--baseurl BASEURL"
     printf "    Keenetic base URL\n"
+    printf "    Default: http://192.168.1.1\n"
     echo
 
     # :flag.usage
@@ -344,6 +347,7 @@ keencli_show_ip_hotspot_usage() {
     # :flag.usage
     printf "  %s\n" "--baseurl BASEURL"
     printf "    Keenetic base URL\n"
+    printf "    Default: http://192.168.1.1\n"
     echo
 
     # :flag.usage
@@ -399,6 +403,7 @@ keencli_show_internet_usage() {
     # :flag.usage
     printf "  %s\n" "--baseurl BASEURL"
     printf "    Keenetic base URL\n"
+    printf "    Default: http://192.168.1.1\n"
     echo
 
     # :flag.usage
@@ -1031,6 +1036,9 @@ keencli_request_parse_requirements() {
     exit 1
   fi
 
+  # :command.default_assignments
+  [[ -n ${args['--baseurl']:-} ]] || args['--baseurl']="http://192.168.1.1"
+
   # :command.whitelist_filter
   if [[ ${args['--format']} ]] && [[ ! ${args['--format']} =~ ^(json|yaml|xml|props)$ ]]; then
     printf "%s\n" "--format must be one of: json, yaml, xml, props" >&2
@@ -1225,6 +1233,7 @@ keencli_show_system_parse_requirements() {
   done
 
   # :command.default_assignments
+  [[ -n ${args['--baseurl']:-} ]] || args['--baseurl']="http://192.168.1.1"
   [[ -n ${args['--format']:-} ]] || args['--format']="yaml"
 
   # :command.whitelist_filter
@@ -1341,6 +1350,7 @@ keencli_show_interface_parse_requirements() {
   done
 
   # :command.default_assignments
+  [[ -n ${args['--baseurl']:-} ]] || args['--baseurl']="http://192.168.1.1"
   [[ -n ${args['--format']:-} ]] || args['--format']="yaml"
 
   # :command.whitelist_filter
@@ -1520,6 +1530,7 @@ keencli_show_ip_hotspot_parse_requirements() {
   done
 
   # :command.default_assignments
+  [[ -n ${args['--baseurl']:-} ]] || args['--baseurl']="http://192.168.1.1"
   [[ -n ${args['--format']:-} ]] || args['--format']="yaml"
 
   # :command.whitelist_filter
@@ -1622,6 +1633,7 @@ keencli_show_internet_parse_requirements() {
   done
 
   # :command.default_assignments
+  [[ -n ${args['--baseurl']:-} ]] || args['--baseurl']="http://192.168.1.1"
   [[ -n ${args['--format']:-} ]] || args['--format']="yaml"
 
   # :command.whitelist_filter
@@ -1634,7 +1646,7 @@ keencli_show_internet_parse_requirements() {
 
 # :command.initialize
 initialize() {
-  version="0.0.1"
+  version="0.1.0"
   long_usage=''
   set -e
 
