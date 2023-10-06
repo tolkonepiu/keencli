@@ -13,7 +13,7 @@ source "src/lib/http/get_http_status_code.sh"
 }
 
 @test "when response have invalid lines" {
-  value=$(echo -e "test: HTTP/1.1\nkey: success")
+  value=$(echo -e "HTTP/1.1\nkey: success")
   run get_http_status_code "${value}"
   [ "$status" -eq 0 ]
   [ "$output" = "" ]
