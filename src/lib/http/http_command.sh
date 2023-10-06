@@ -11,7 +11,6 @@ function http_command() {
 
   debug "Trying ${baseurl}..."
 
-
   data_path=$(mktemp)
 
   if ! result=$(
