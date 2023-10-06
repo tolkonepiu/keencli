@@ -7,7 +7,7 @@ function http_command() {
   output="${4:-/dev/stdout}"
   format="${5}"
 
-  login "${baseurl}"
+  http_login "${baseurl}"
 
   debug "Trying ${baseurl}..."
 

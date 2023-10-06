@@ -1,5 +1,5 @@
 # shellcheck shell=bash
-function login() {
+function http_login() {
   local baseurl login password
   baseurl="${1:?baseurl must be set}"
   login="${KEENETIC_USERNAME:?KEENETIC_USERNAME env must be set}"
@@ -35,7 +35,7 @@ function login() {
       "${x_ndm_challenge}"
   )
 
-  log "Log in to ${baseurl}..."
+  debug "Log in to ${baseurl}..."
   if ! result=$(
     http_request_ohir \
       "${baseurl}" \
