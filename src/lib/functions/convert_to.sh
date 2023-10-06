@@ -1,4 +1,3 @@
-# shellcheck shell=bash
 convert_to() {
   input_format="${1:?input_format must be set}"
   output_format="${2:?output_format must be set}"

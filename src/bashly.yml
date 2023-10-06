@@ -1,7 +1,7 @@
 ---
 name: keencli
 help: Keenetic command-line interface written in Bash
-version: 0.0.1
+version: 0.0.2
 
 dependencies:
   curl: https://curl.se/
@@ -60,6 +60,11 @@ commands:
           request will be made)
         required: false
         validate: json
+
+  - name: completions
+    help: |-
+      Generate bash completions
+      Usage: eval "\$(keencli completions)"
 
     flags:
       - *host

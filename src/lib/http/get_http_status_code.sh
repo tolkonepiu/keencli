@@ -1,4 +1,3 @@
-# shellcheck shell=bash
 function get_http_status_code() {
   local response
   response="${1:?response must be set}"

@@ -1,4 +1,3 @@
-# shellcheck shell=bash
 function error() {
   echo -e "($(date +'%Y-%m-%dT%H:%M:%S')) ERROR: $1" >&2
   exit 1

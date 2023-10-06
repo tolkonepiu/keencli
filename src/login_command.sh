@@ -1,4 +1,4 @@
-# shellcheck shell=bash disable=SC2154 disable=SC2168
+# shellcheck disable=SC2154 disable=SC2168
 local host port scheme login password
 host="${args[--host]}"
 port="${args[--port]}"

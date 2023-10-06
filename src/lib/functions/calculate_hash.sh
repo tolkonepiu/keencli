@@ -1,4 +1,4 @@
-# shellcheck shell=bash disable=SC2154
+# shellcheck disable=SC2154
 function calculate_hash() {
   local login password x_ndm_realm x_ndm_challenge
 

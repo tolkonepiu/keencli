@@ -1,4 +1,3 @@
-# shellcheck shell=bash
 function request() {
   local host port scheme url_path request_data output \
     verbose login password response

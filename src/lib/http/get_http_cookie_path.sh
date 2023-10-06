@@ -1,4 +1,3 @@
-# shellcheck shell=bash
 function get_http_cookie_path() {
   local host port
 

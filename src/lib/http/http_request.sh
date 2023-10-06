@@ -1,4 +1,3 @@
-# shellcheck shell=bash
 function http_request() {
   local host port scheme url_path request_data \
     output_path base_url cookie_path

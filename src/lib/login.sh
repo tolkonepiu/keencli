@@ -1,4 +1,3 @@
-# shellcheck shell=bash
 function login() {
   local host port scheme verbose login password response
   host="${1:?host must be set}"
