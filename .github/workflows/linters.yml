@@ -70,7 +70,7 @@ jobs:
       - name: 🏗️ Setup ruby
         uses: ruby/setup-ruby@v1
         with:
-          # renovate: versioning=ruby
+          # renovate: datasource=ruby-version depName=ruby versioning=ruby
           ruby-version: 3.2.2
       - name: 🏗️ Setup bashly
         run: gem install bashly -v "${BASHLY_VERSION}"
