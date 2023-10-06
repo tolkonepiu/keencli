@@ -18,37 +18,8 @@ environment_variables:
     required: true
 
 commands:
-  - name: login
-    help: Log in to a Keenetic router
-
-    flags:
-      - &host
-        long: --host
-        short: -h
-        arg: host
-        help: Host name
-        default: 192.168.1.1
-      - &port
-        long: --port
-        short: -p
-        arg: port
-        help: Port number
-      - &scheme
-        long: --scheme
-        short: -s
-        arg: scheme
-        help: URL scheme
-        default: http
-        allowed:
-          - http
-          - https
-
-    examples:
-      - keencli login --host 192.168.0.1 --port 8080
-      - keencli login -s https --host myrouter01.keenetic.link
-
   - name: request
-    help: Make a http-request to a Keenetic router
+    help: Make an http-request to the Keenetic router
 
     args:
       - name: url_path
@@ -62,10 +33,12 @@ commands:
         validate: json
 
     flags:
-      - *host
-      - *port
-      - *scheme
-      - long: --output
+      - &baseurl
+        long: --baseurl
+        arg: baseurl
+        help: Keenetic base URL
+      - &output
+        long: --output
         short: -o
         arg: output
         help: Write to file instead of stdout
@@ -78,18 +51,82 @@ commands:
           - yaml
           - xml
           - props
-      - long: --verbose
-        help: Make the client more talkative
 
     examples:
       - keencli request /rci/
-      - keencli request -p 8080 --verbose /rci/
       - keencli request -f yaml -o /tmp/dump /rci/
-      - keencli request -s https --host myrouter01.keenetic.link /rci/
+      - keencli request --baseurl https://myrouter01.keenetic.link /rci/
       - >-
         keencli request
-        -s https
-        --host
-        myrouter01.keenetic.link
+        --baseurl https://myrouter01.keenetic.link:8080
         /rci/
         '[{"show":{"interface":{}}}]'
+
+  - name: show
+    help: Show various diagnostic information
+    commands:
+      - name: system
+        help: Show system status information
+        flags:
+          - *baseurl
+          - *output
+          - &format
+            long: --format
+            short: -f
+            arg: format
+            default: yaml
+            allowed:
+              - json
+              - yaml
+              - xml
+              - props
+        args:
+          - name: subcommand
+            help: |
+              Subcommands:
+                caption - show system caption
+                country - show system country
+                cpustat - show system CPU status
+                debug   - show system debug status
+                mode    - show system mode status
+                zram    - show system zram swap status
+            allowed:
+              - caption
+              - country
+              - cpustat
+              - debug
+              - mode
+              - zram
+      - name: interface
+        help: Show interface status
+        flags:
+          - *baseurl
+          - *output
+          - *format
+        args:
+          - name: interface_name
+            help: Interface name (example `GigabitEthernet0`)
+          - name: subcommand
+            help: |
+              Subcommands:
+                stat - show interface statistics
+            allowed:
+              - stat
+      - name: ip
+        help: Show IP information
+        commands:
+          - name: hotspot
+            help: Show hotspot hosts
+            flags:
+              - *baseurl
+              - *output
+              - *format
+            args:
+              - name: mac_address
+                help: MAC address (example `b0:c2:b9:aa:0d:dd`)
+      - name: internet
+        help: Show Internet check status
+        flags:
+          - *baseurl
+          - *output
+          - *format

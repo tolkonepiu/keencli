@@ -1,4 +1,4 @@
-# shellcheck shell=bash disable=SC2154
+# shellcheck shell=bash
 function calculate_hash() {
   local login password x_ndm_realm x_ndm_challenge
 
@@ -8,7 +8,7 @@ function calculate_hash() {
   x_ndm_challenge=${4:?x_ndm_challenge must be set}
 
   md5string="${login}:${x_ndm_realm}:${password}"
-  md5hash=$(echo -n "$md5string" | "${deps[md5]}" | awk '{print $1}')
+  md5hash=$(md5_hash "$md5string")
   sha256string="$x_ndm_challenge$md5hash"
   echo -n "$sha256string" | shasum -a 256 | awk '{print $1}'
 }

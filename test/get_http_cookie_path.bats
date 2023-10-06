@@ -4,6 +4,12 @@ load test_helper.bash
 
 # shellcheck source=../src/lib/http/get_http_cookie_path.sh
 source "src/lib/http/get_http_cookie_path.sh"
+# shellcheck source=../src/lib/functions/md5_hash.sh
+source "src/lib/functions/md5_hash.sh"
+
+setup() {
+  deps[md5]=$(which md5sum)
+}
 
 @test "without parameters" {
   run get_http_cookie_path
@@ -11,15 +17,10 @@ source "src/lib/http/get_http_cookie_path.sh"
 }
 
 @test "if set all parameters" {
-  run get_http_cookie_path localhost 80
+  run get_http_cookie_path http://localhost:80
+  echo $output
   [ "$status" -eq 0 ]
-  [[ "$output" =~ keencli-localhost:80.cookie$ ]]
-}
-
-@test "without port" {
-  run get_http_cookie_path localhost
-  [ "$status" -eq 0 ]
-  [[ "$output" =~ keencli-localhost.cookie$ ]]
+  [[ "$output" =~ keencli-06aca1042eaa4240465ba7b5d4fdae52.cookie$ ]]
 }
 
 @test "check idempotency" {
