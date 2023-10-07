@@ -67,10 +67,10 @@ commands:
         '[{"show":{"interface":{}}}]'
 
   - name: show
-    help: Show various diagnostic information
+    help: Various diagnostic information
     commands:
       - name: system
-        help: Show system status information
+        help: System status information
         flags:
           - *baseurl
           - *output
@@ -88,12 +88,12 @@ commands:
           - name: subcommand
             help: |
               Subcommands:
-                caption - show system caption
-                country - show system country
-                cpustat - show system CPU status
-                debug   - show system debug status
-                mode    - show system mode status
-                zram    - show system zram swap status
+                caption - system caption
+                country - system country
+                cpustat - system CPU status
+                debug   - system debug status
+                mode    - system mode status
+                zram    - system zram swap status
             allowed:
               - caption
               - country
@@ -102,7 +102,7 @@ commands:
               - mode
               - zram
       - name: interface
-        help: Show interface status
+        help: Interface status
         flags:
           - *baseurl
           - *output
@@ -113,14 +113,14 @@ commands:
           - name: subcommand
             help: |
               Subcommands:
-                stat - show interface statistics
+                stat - interface statistics
             allowed:
               - stat
       - name: ip
-        help: Show IP information
+        help: IP information
         commands:
           - name: hotspot
-            help: Show hotspot hosts
+            help: Hotspot hosts
             flags:
               - *baseurl
               - *output
@@ -129,8 +129,41 @@ commands:
               - name: mac_address
                 help: MAC address (example `b0:c2:b9:aa:0d:dd`)
       - name: internet
-        help: Show Internet check status
+        help: Internet check status
         flags:
           - *baseurl
           - *output
           - *format
+  - name: config
+    help: Configuration files
+    flags:
+      - *baseurl
+      - *output
+    args:
+      - name: configuration_file
+        help: >
+          System configuration file
+
+          Available options:
+
+          default-config - factory default settings for this device
+
+          running-config - current settings for this device
+
+          startup-config - set of commands that runs when the system
+          starts
+        required: true
+        allowed:
+          - startup-config
+          - default-config
+          - running-config
+  - name: log
+    help: System event log for system diagnostics
+    flags:
+      - *baseurl
+      - *output
+  - name: self-test
+    help: Full diagnostic information about this device
+    flags:
+      - *baseurl
+      - *output

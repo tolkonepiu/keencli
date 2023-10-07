@@ -18,7 +18,6 @@ setup() {
 
 @test "if set all parameters" {
   run get_http_cookie_path http://localhost:80
-  echo $output
   [ "$status" -eq 0 ]
   [[ "$output" =~ keencli-06aca1042eaa4240465ba7b5d4fdae52.cookie$ ]]
 }

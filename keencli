@@ -34,8 +34,11 @@ keencli_usage() {
   echo
   # :command.usage_commands
   printf "%s\n" "Commands:"
-  printf "  %s   Make an http-request to the Keenetic router\n" "request"
-  printf "  %s   Show various diagnostic information\n" "show   "
+  printf "  %s   Make an http-request to the Keenetic router\n" "request  "
+  printf "  %s   Various diagnostic information\n" "show     "
+  printf "  %s   Configuration files\n" "config   "
+  printf "  %s   System event log for system diagnostics\n" "log      "
+  printf "  %s   Full diagnostic information about this device\n" "self-test"
   echo
 
   # :command.long_usage
@@ -137,11 +140,11 @@ keencli_request_usage() {
 # :command.usage
 keencli_show_usage() {
   if [[ -n $long_usage ]]; then
-    printf "keencli show - Show various diagnostic information\n"
+    printf "keencli show - Various diagnostic information\n"
     echo
 
   else
-    printf "keencli show - Show various diagnostic information\n"
+    printf "keencli show - Various diagnostic information\n"
     echo
 
   fi
@@ -152,10 +155,10 @@ keencli_show_usage() {
   echo
   # :command.usage_commands
   printf "%s\n" "Commands:"
-  printf "  %s   Show system status information\n" "system   "
-  printf "  %s   Show interface status\n" "interface"
-  printf "  %s   Show IP information\n" "ip       "
-  printf "  %s   Show Internet check status\n" "internet "
+  printf "  %s   System status information\n" "system   "
+  printf "  %s   Interface status\n" "interface"
+  printf "  %s   IP information\n" "ip       "
+  printf "  %s   Internet check status\n" "internet "
   echo
 
   # :command.long_usage
@@ -173,11 +176,11 @@ keencli_show_usage() {
 # :command.usage
 keencli_show_system_usage() {
   if [[ -n $long_usage ]]; then
-    printf "keencli show system - Show system status information\n"
+    printf "keencli show system - System status information\n"
     echo
 
   else
-    printf "keencli show system - Show system status information\n"
+    printf "keencli show system - System status information\n"
     echo
 
   fi
@@ -220,7 +223,7 @@ keencli_show_system_usage() {
 
     # :argument.usage
     printf "  %s\n" "SUBCOMMAND"
-    printf "    Subcommands:\n      caption - show system caption\n      country - show system country\n      cpustat - show system CPU status\n      debug   - show system debug status\n      mode    - show system mode status\n      zram    - show system zram swap status\n"
+    printf "    Subcommands:\n      caption - system caption\n      country - system country\n      cpustat - system CPU status\n      debug   - system debug status\n      mode    - system mode status\n      zram    - system zram swap status\n"
     printf "    Allowed: caption, country, cpustat, debug, mode, zram\n"
     echo
 
@@ -230,11 +233,11 @@ keencli_show_system_usage() {
 # :command.usage
 keencli_show_interface_usage() {
   if [[ -n $long_usage ]]; then
-    printf "keencli show interface - Show interface status\n"
+    printf "keencli show interface - Interface status\n"
     echo
 
   else
-    printf "keencli show interface - Show interface status\n"
+    printf "keencli show interface - Interface status\n"
     echo
 
   fi
@@ -282,7 +285,7 @@ keencli_show_interface_usage() {
 
     # :argument.usage
     printf "  %s\n" "SUBCOMMAND"
-    printf "    Subcommands:\n      stat - show interface statistics\n"
+    printf "    Subcommands:\n      stat - interface statistics\n"
     printf "    Allowed: stat\n"
     echo
 
@@ -292,11 +295,11 @@ keencli_show_interface_usage() {
 # :command.usage
 keencli_show_ip_usage() {
   if [[ -n $long_usage ]]; then
-    printf "keencli show ip - Show IP information\n"
+    printf "keencli show ip - IP information\n"
     echo
 
   else
-    printf "keencli show ip - Show IP information\n"
+    printf "keencli show ip - IP information\n"
     echo
 
   fi
@@ -307,7 +310,7 @@ keencli_show_ip_usage() {
   echo
   # :command.usage_commands
   printf "%s\n" "Commands:"
-  printf "  %s   Show hotspot hosts\n" "hotspot"
+  printf "  %s   Hotspot hosts\n" "hotspot"
   echo
 
   # :command.long_usage
@@ -325,11 +328,11 @@ keencli_show_ip_usage() {
 # :command.usage
 keencli_show_ip_hotspot_usage() {
   if [[ -n $long_usage ]]; then
-    printf "keencli show ip hotspot - Show hotspot hosts\n"
+    printf "keencli show ip hotspot - Hotspot hosts\n"
     echo
 
   else
-    printf "keencli show ip hotspot - Show hotspot hosts\n"
+    printf "keencli show ip hotspot - Hotspot hosts\n"
     echo
 
   fi
@@ -381,11 +384,11 @@ keencli_show_ip_hotspot_usage() {
 # :command.usage
 keencli_show_internet_usage() {
   if [[ -n $long_usage ]]; then
-    printf "keencli show internet - Show Internet check status\n"
+    printf "keencli show internet - Internet check status\n"
     echo
 
   else
-    printf "keencli show internet - Show Internet check status\n"
+    printf "keencli show internet - Internet check status\n"
     echo
 
   fi
@@ -416,6 +419,138 @@ keencli_show_internet_usage() {
     printf "\n"
     printf "    Allowed: json, yaml, xml, props\n"
     printf "    Default: yaml\n"
+    echo
+
+    # :command.usage_fixed_flags
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+keencli_config_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "keencli config - Configuration files\n"
+    echo
+
+  else
+    printf "keencli config - Configuration files\n"
+    echo
+
+  fi
+
+  printf "%s\n" "Usage:"
+  printf "  keencli config CONFIGURATION_FILE [OPTIONS]\n"
+  printf "  keencli config --help | -h\n"
+  echo
+
+  # :command.long_usage
+  if [[ -n $long_usage ]]; then
+    printf "%s\n" "Options:"
+
+    # :command.usage_flags
+    # :flag.usage
+    printf "  %s\n" "--baseurl BASEURL"
+    printf "    Keenetic base URL (example \`http://192.168.1.1\`,\n    \`https://myrouter01.keenetic.link\`)\n"
+    printf "    Default: http://192.168.1.1\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--output, -o OUTPUT"
+    printf "    Write to file instead of stdout\n"
+    echo
+
+    # :command.usage_fixed_flags
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
+    echo
+
+    # :command.usage_args
+    printf "%s\n" "Arguments:"
+
+    # :argument.usage
+    printf "  %s\n" "CONFIGURATION_FILE"
+    printf "    System configuration file\n    Available options:\n    default-config - factory default settings for this device\n    running-config - current settings for this device\n    startup-config - set of commands that runs when the system starts\n"
+    printf "    Allowed: startup-config, default-config, running-config\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+keencli_log_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "keencli log - System event log for system diagnostics\n"
+    echo
+
+  else
+    printf "keencli log - System event log for system diagnostics\n"
+    echo
+
+  fi
+
+  printf "%s\n" "Usage:"
+  printf "  keencli log [OPTIONS]\n"
+  printf "  keencli log --help | -h\n"
+  echo
+
+  # :command.long_usage
+  if [[ -n $long_usage ]]; then
+    printf "%s\n" "Options:"
+
+    # :command.usage_flags
+    # :flag.usage
+    printf "  %s\n" "--baseurl BASEURL"
+    printf "    Keenetic base URL (example \`http://192.168.1.1\`,\n    \`https://myrouter01.keenetic.link\`)\n"
+    printf "    Default: http://192.168.1.1\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--output, -o OUTPUT"
+    printf "    Write to file instead of stdout\n"
+    echo
+
+    # :command.usage_fixed_flags
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+keencli_self_test_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "keencli self-test - Full diagnostic information about this device\n"
+    echo
+
+  else
+    printf "keencli self-test - Full diagnostic information about this device\n"
+    echo
+
+  fi
+
+  printf "%s\n" "Usage:"
+  printf "  keencli self-test [OPTIONS]\n"
+  printf "  keencli self-test --help | -h\n"
+  echo
+
+  # :command.long_usage
+  if [[ -n $long_usage ]]; then
+    printf "%s\n" "Options:"
+
+    # :command.usage_flags
+    # :flag.usage
+    printf "  %s\n" "--baseurl BASEURL"
+    printf "    Keenetic base URL (example \`http://192.168.1.1\`,\n    \`https://myrouter01.keenetic.link\`)\n"
+    printf "    Default: http://192.168.1.1\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--output, -o OUTPUT"
+    printf "    Write to file instead of stdout\n"
     echo
 
     # :command.usage_fixed_flags
@@ -821,6 +956,45 @@ keencli_show_internet_command() {
 
 }
 
+# :command.function
+keencli_config_command() {
+  # src/config_command.sh
+  # shellcheck shell=bash disable=SC2154
+  http_command \
+    "${args[--baseurl]}" \
+    "/ci/${args[system_filename]}.txt" \
+    "${args[request_data]}" \
+    "${args[--output]}" \
+    "${args[--format]}"
+
+}
+
+# :command.function
+keencli_log_command() {
+  # src/log_command.sh
+  # shellcheck shell=bash disable=SC2154
+  http_command \
+    "${args[--baseurl]}" \
+    "/ci/log.txt" \
+    "${args[request_data]}" \
+    "${args[--output]}" \
+    "${args[--format]}"
+
+}
+
+# :command.function
+keencli_self_test_command() {
+  # src/self_test_command.sh
+  # shellcheck shell=bash disable=SC2154
+  http_command \
+    "${args[--baseurl]}" \
+    "/ci/self-test.txt" \
+    "${args[request_data]}" \
+    "${args[--output]}" \
+    "${args[--format]}"
+
+}
+
 # :command.parse_requirements
 parse_requirements() {
   # :command.fixed_flags_filter
@@ -896,6 +1070,27 @@ parse_requirements() {
       action="show"
       shift
       keencli_show_parse_requirements "$@"
+      shift $#
+      ;;
+
+    config)
+      action="config"
+      shift
+      keencli_config_parse_requirements "$@"
+      shift $#
+      ;;
+
+    log)
+      action="log"
+      shift
+      keencli_log_parse_requirements "$@"
+      shift $#
+      ;;
+
+    self-test)
+      action="self-test"
+      shift
+      keencli_self_test_parse_requirements "$@"
       shift $#
       ;;
 
@@ -1680,6 +1875,282 @@ keencli_show_internet_parse_requirements() {
 
 }
 
+# :command.parse_requirements
+keencli_config_parse_requirements() {
+  # :command.fixed_flags_filter
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+      --help | -h)
+        long_usage=yes
+        keencli_config_usage
+        exit
+        ;;
+
+      *)
+        break
+        ;;
+
+    esac
+  done
+
+  # :command.command_filter
+  action="config"
+
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+      # :flag.case
+      --baseurl)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          # :flag.validations
+          if [[ -n $(validate_baseurl "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_baseurl "$2")" >&2
+            exit 1
+          fi
+
+          args['--baseurl']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--baseurl requires an argument: --baseurl BASEURL" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --output | -o)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          # :flag.validations
+          if [[ -n $(validate_file_path "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--output, -o OUTPUT" "$(validate_file_path "$2")" >&2
+            exit 1
+          fi
+
+          args['--output']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--output requires an argument: --output, -o OUTPUT" >&2
+          exit 1
+        fi
+        ;;
+
+      -?*)
+        printf "invalid option: %s\n" "$key" >&2
+        exit 1
+        ;;
+
+      *)
+        # :command.parse_requirements_case
+        # :command.parse_requirements_case_simple
+        if [[ -z ${args['configuration_file']+x} ]]; then
+
+          args['configuration_file']=$1
+          shift
+        else
+          printf "invalid argument: %s\n" "$key" >&2
+          exit 1
+        fi
+
+        ;;
+
+    esac
+  done
+
+  # :command.required_args_filter
+  if [[ -z ${args['configuration_file']+x} ]]; then
+    printf "missing required argument: CONFIGURATION_FILE\nusage: keencli config CONFIGURATION_FILE [OPTIONS]\n" >&2
+    exit 1
+  fi
+
+  # :command.default_assignments
+  [[ -n ${args['--baseurl']:-} ]] || args['--baseurl']="http://192.168.1.1"
+
+  # :command.whitelist_filter
+  if [[ -n ${args['configuration_file']} ]] && [[ ! ${args['configuration_file']} =~ ^(startup-config|default-config|running-config)$ ]]; then
+    printf "%s\n" "configuration_file must be one of: startup-config, default-config, running-config" >&2
+    exit 1
+  fi
+
+}
+
+# :command.parse_requirements
+keencli_log_parse_requirements() {
+  # :command.fixed_flags_filter
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+      --help | -h)
+        long_usage=yes
+        keencli_log_usage
+        exit
+        ;;
+
+      *)
+        break
+        ;;
+
+    esac
+  done
+
+  # :command.command_filter
+  action="log"
+
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+      # :flag.case
+      --baseurl)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          # :flag.validations
+          if [[ -n $(validate_baseurl "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_baseurl "$2")" >&2
+            exit 1
+          fi
+
+          args['--baseurl']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--baseurl requires an argument: --baseurl BASEURL" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --output | -o)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          # :flag.validations
+          if [[ -n $(validate_file_path "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--output, -o OUTPUT" "$(validate_file_path "$2")" >&2
+            exit 1
+          fi
+
+          args['--output']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--output requires an argument: --output, -o OUTPUT" >&2
+          exit 1
+        fi
+        ;;
+
+      -?*)
+        printf "invalid option: %s\n" "$key" >&2
+        exit 1
+        ;;
+
+      *)
+        # :command.parse_requirements_case
+        # :command.parse_requirements_case_simple
+        printf "invalid argument: %s\n" "$key" >&2
+        exit 1
+
+        ;;
+
+    esac
+  done
+
+  # :command.default_assignments
+  [[ -n ${args['--baseurl']:-} ]] || args['--baseurl']="http://192.168.1.1"
+
+}
+
+# :command.parse_requirements
+keencli_self_test_parse_requirements() {
+  # :command.fixed_flags_filter
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+      --help | -h)
+        long_usage=yes
+        keencli_self_test_usage
+        exit
+        ;;
+
+      *)
+        break
+        ;;
+
+    esac
+  done
+
+  # :command.command_filter
+  action="self-test"
+
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+      # :flag.case
+      --baseurl)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          # :flag.validations
+          if [[ -n $(validate_baseurl "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_baseurl "$2")" >&2
+            exit 1
+          fi
+
+          args['--baseurl']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--baseurl requires an argument: --baseurl BASEURL" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --output | -o)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          # :flag.validations
+          if [[ -n $(validate_file_path "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--output, -o OUTPUT" "$(validate_file_path "$2")" >&2
+            exit 1
+          fi
+
+          args['--output']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--output requires an argument: --output, -o OUTPUT" >&2
+          exit 1
+        fi
+        ;;
+
+      -?*)
+        printf "invalid option: %s\n" "$key" >&2
+        exit 1
+        ;;
+
+      *)
+        # :command.parse_requirements_case
+        # :command.parse_requirements_case_simple
+        printf "invalid argument: %s\n" "$key" >&2
+        exit 1
+
+        ;;
+
+    esac
+  done
+
+  # :command.default_assignments
+  [[ -n ${args['--baseurl']:-} ]] || args['--baseurl']="http://192.168.1.1"
+
+}
+
 # :command.initialize
 initialize() {
   version="0.1.1"
@@ -1705,6 +2176,9 @@ run() {
     "show ip") keencli_show_ip_command ;;
     "show ip hotspot") keencli_show_ip_hotspot_command ;;
     "show internet") keencli_show_internet_command ;;
+    "config") keencli_config_command ;;
+    "log") keencli_log_command ;;
+    "self-test") keencli_self_test_command ;;
   esac
 }
 
