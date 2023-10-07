@@ -9,7 +9,7 @@ name: Release
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Build image
+    name: Release
     steps:
       - name: ⤵️ Check out code
         uses: actions/checkout@v4
