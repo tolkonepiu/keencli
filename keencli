@@ -57,6 +57,11 @@ keencli_usage() {
     printf "%s\n" "Environment Variables:"
 
     # :environment_variable.usage
+    printf "  %s\n" "KEENETIC_BASE_URL"
+    printf "    Keenetic base URL\n"
+    echo
+
+    # :environment_variable.usage
     printf "  %s\n" "KEENETIC_USERNAME (required)"
     printf "    Keenetic username\n"
     echo
@@ -636,10 +641,10 @@ convert_to() {
   input_format="${1:?input_format must be set}"
   output_format="${2:?output_format must be set}"
 
-  yq -r -e \
+  yq 2>&1 -r -e \
     -p "${input_format}" \
     -o "${output_format}" \
-    </dev/stdin 2>&1
+    </dev/stdin
 }
 
 convert_json_to() {
@@ -705,8 +710,8 @@ function get_http_status_code() {
 # src/lib/http/http_command.sh
 # shellcheck shell=bash
 function http_command() {
-  local baseurl url_path request_data output
-  baseurl="${1:?baseurl must be set}"
+  local baseurl url_path request_data output format
+  baseurl="${KEENETIC_BASE_URL:-$1}"
   url_path="${2}"
   request_data="${3}"
   output="${4:-/dev/stdout}"
@@ -973,9 +978,11 @@ keencli_config_command() {
 keencli_log_command() {
   # src/log_command.sh
   # shellcheck shell=bash disable=SC2154
+  url_path="/ci/log.txt"
+
   http_command \
     "${args[--baseurl]}" \
-    "/ci/log.txt" \
+    "${url_path}" \
     "${args[request_data]}" \
     "${args[--output]}" \
     "${args[--format]}"
@@ -986,9 +993,11 @@ keencli_log_command() {
 keencli_self_test_command() {
   # src/self_test_command.sh
   # shellcheck shell=bash disable=SC2154
+  url_path="/ci/log.txt"
+
   http_command \
     "${args[--baseurl]}" \
-    "/ci/self-test.txt" \
+    "${url_path}" \
     "${args[request_data]}" \
     "${args[--output]}" \
     "${args[--format]}"

@@ -3,10 +3,10 @@ convert_to() {
   input_format="${1:?input_format must be set}"
   output_format="${2:?output_format must be set}"
 
-  yq -r -e \
+  yq 2>&1 -r -e \
     -p "${input_format}" \
     -o "${output_format}" \
-    </dev/stdin 2>&1
+    </dev/stdin
 }
 
 convert_json_to() {

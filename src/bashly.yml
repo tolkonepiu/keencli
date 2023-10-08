@@ -10,6 +10,8 @@ dependencies:
     command: [md5sum, md5]
 
 environment_variables:
+  - name: KEENETIC_BASE_URL
+    help: Keenetic base URL
   - name: KEENETIC_USERNAME
     help: Keenetic username
     required: true

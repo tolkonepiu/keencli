@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 function http_command() {
-  local baseurl url_path request_data output
-  baseurl="${1:?baseurl must be set}"
+  local baseurl url_path request_data output format
+  baseurl="${KEENETIC_BASE_URL:-$1}"
   url_path="${2}"
   request_data="${3}"
   output="${4:-/dev/stdout}"
