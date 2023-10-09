@@ -1,4 +1,6 @@
+<!-- markdownlint-disable -->
 <div align='center'>
+<!-- markdownlint-enable -->
 
 # keencli
 
@@ -23,7 +25,9 @@ Bash script to control Keenetic routers via HTTP API
 
 ---
 
+<!-- markdownlint-disable -->
 </div>
+<!-- markdownlint-enable -->
 
 ## Requirements
 
