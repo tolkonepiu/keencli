@@ -1,6 +1,33 @@
+<!-- markdownlint-disable -->
+<div align='center'>
+<!-- markdownlint-enable -->
+
 # keencli
 
-Bash script to control Keenetic routers via HTTP API.
+Bash script to control Keenetic routers via HTTP API
+
+[
+![version](https://img.shields.io/github/v/release/tolkonepiu/keencli?label=version)
+](https://github.com/tolkonepiu/keencli/releases/latest)
+[
+![license](https://img.shields.io/github/license/tolkonepiu/keencli)
+](LICENSE)
+[
+![linters](https://github.com/tolkonepiu/keencli/actions/workflows/linters.yml/badge.svg?branch=main)
+](https://github.com/tolkonepiu/keencli/actions/workflows/linters.yml?query=branch%3Amain)
+[
+![tests](https://github.com/tolkonepiu/keencli/actions/workflows/tests.yml/badge.svg?branch=main)
+](https://github.com/tolkonepiu/keencli/actions/workflows/tests.yml?query=branch%3Amain)
+
+---
+
+[![keencli](keencli.gif)](https://asciinema.org/a/612771?autoplay=1)
+
+---
+
+<!-- markdownlint-disable -->
+</div>
+<!-- markdownlint-enable -->
 
 ## Requirements
 
@@ -53,6 +80,12 @@ To turn on debugging output:
 
 ```sh
 DEBUG=1 keencli <command> <subcommand>
+```
+
+To turn off color output:
+
+```sh
+NO_COLOR=1 keencli <command> <subcommand>
 ```
 
 ## Development

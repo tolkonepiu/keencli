@@ -54,6 +54,7 @@ commands:
       - long: --format
         short: -f
         arg: format
+        help: Output format type
         allowed:
           - json
           - yaml
@@ -82,6 +83,7 @@ commands:
             long: --format
             short: -f
             arg: format
+            help: Output format type
             default: yaml
             allowed:
               - json

@@ -109,7 +109,7 @@ keencli_request_usage() {
 
     # :flag.usage
     printf "  %s\n" "--format, -f FORMAT"
-    printf "\n"
+    printf "    Output format type\n"
     printf "    Allowed: json, yaml, xml, props\n"
     echo
 
@@ -213,7 +213,7 @@ keencli_show_system_usage() {
 
     # :flag.usage
     printf "  %s\n" "--format, -f FORMAT"
-    printf "\n"
+    printf "    Output format type\n"
     printf "    Allowed: json, yaml, xml, props\n"
     printf "    Default: yaml\n"
     echo
@@ -270,7 +270,7 @@ keencli_show_interface_usage() {
 
     # :flag.usage
     printf "  %s\n" "--format, -f FORMAT"
-    printf "\n"
+    printf "    Output format type\n"
     printf "    Allowed: json, yaml, xml, props\n"
     printf "    Default: yaml\n"
     echo
@@ -365,7 +365,7 @@ keencli_show_ip_hotspot_usage() {
 
     # :flag.usage
     printf "  %s\n" "--format, -f FORMAT"
-    printf "\n"
+    printf "    Output format type\n"
     printf "    Allowed: json, yaml, xml, props\n"
     printf "    Default: yaml\n"
     echo
@@ -421,7 +421,7 @@ keencli_show_internet_usage() {
 
     # :flag.usage
     printf "  %s\n" "--format, -f FORMAT"
-    printf "\n"
+    printf "    Output format type\n"
     printf "    Allowed: json, yaml, xml, props\n"
     printf "    Default: yaml\n"
     echo
