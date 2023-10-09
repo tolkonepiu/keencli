@@ -1,4 +1,3 @@
-# shellcheck shell=bash
 function http_login() {
   local baseurl login password
   baseurl="${1:?baseurl must be set}"
@@ -15,7 +14,7 @@ function http_login() {
 
   status_code=$(get_http_status_code "$result")
   [[ "$status_code" -eq 200 ]] &&
-    debug "Already logged in" &&
+    log "Already logged in" &&
     return 0
 
   [[ "$status_code" -ne 401 ]] &&
@@ -27,6 +26,7 @@ function http_login() {
   [[ -z "$x_ndm_realm" || -z "$x_ndm_challenge" ]] &&
     error "Login failed, required headers not found"
 
+  debug "Calculate hash: realm=${x_ndm_realm}, challenge=${x_ndm_challenge}"
   hash=$(
     calculate_hash \
       "${login}" \
@@ -34,8 +34,9 @@ function http_login() {
       "${x_ndm_realm}" \
       "${x_ndm_challenge}"
   )
+  debug "Hash result: ${hash}"
 
-  debug "Log in to ${baseurl}..."
+  log "Log in to ${baseurl}..."
   if ! result=$(
     http_request_ohir \
       "${baseurl}" \
@@ -49,5 +50,5 @@ function http_login() {
   [[ "$status_code" -ne 200 ]] &&
     error "Login failed${status_code:+, status_code: ${status_code}}"
 
-  debug "Login successful"
+  log "Login successful"
 }

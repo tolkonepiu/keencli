@@ -1,14 +1,13 @@
-# shellcheck shell=bash
 function http_request() {
-  local baseurl url_path request_data \
+  local base_url url_path request_data \
     output_path cookie_path
 
-  baseurl="${1:?baseurl must be set}"
+  base_url="${1:?base_url must be set}"
   url_path="${2:?url path must be set}"
   request_data="${3}"
   output_path="${4}"
 
-  cookie_path=$(get_http_cookie_path "${baseurl}")
+  cookie_path=$(get_http_cookie_path "${base_url}")
 
   ARGS=(-sS -D -)
 
@@ -22,7 +21,7 @@ function http_request() {
 
   curl 2>&1 \
     "${ARGS[@]}" \
-    "${baseurl}${url_path}" \
+    "${base_url}${url_path}" \
     --cookie "${cookie_path}" \
     --cookie-jar "${cookie_path}"
 }

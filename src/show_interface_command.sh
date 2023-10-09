@@ -1,4 +1,4 @@
-# shellcheck shell=bash disable=SC2154
+# shellcheck disable=SC2154
 url_path="/rci/show/interface"
 
 subcommand="${args[subcommand]}"

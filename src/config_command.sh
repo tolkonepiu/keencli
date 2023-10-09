@@ -1,4 +1,4 @@
-# shellcheck shell=bash disable=SC2154
+# shellcheck disable=SC2154
 http_command \
   "${args[--baseurl]}" \
   "/ci/${args[system_filename]}.txt" \
