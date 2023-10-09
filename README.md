@@ -2,6 +2,8 @@
 
 Bash script to control Keenetic routers via HTTP API.
 
+[![keencli](https://asciinema.org/a/612771.svg)](https://asciinema.org/a/612771)
+
 ## Requirements
 
 - GNU/Linux or macOS with Bash 4+
