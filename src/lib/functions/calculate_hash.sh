@@ -1,4 +1,3 @@
-# shellcheck shell=bash
 function calculate_hash() {
   local login password x_ndm_realm x_ndm_challenge
 

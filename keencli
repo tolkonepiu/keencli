@@ -58,7 +58,7 @@ keencli_usage() {
 
     # :environment_variable.usage
     printf "  %s\n" "KEENETIC_BASE_URL"
-    printf "    Keenetic base URL\n"
+    printf "    Keenetic base URL (example \`http://192.168.1.1\`,\n    \`https://myrouter01.keenetic.link\`)\n"
     echo
 
     # :environment_variable.usage
@@ -619,8 +619,39 @@ inspect_args() {
 }
 
 # :command.user_lib
+# src/lib/colors.sh
+print_in_color() {
+  local color="$1"
+  shift
+  if [[ -z ${NO_COLOR+x} ]]; then
+    printf "$color%b\e[0m\n" "$*"
+  else
+    printf "%b\n" "$*"
+  fi
+}
+
+red() { print_in_color "\e[31m" "$*"; }
+green() { print_in_color "\e[32m" "$*"; }
+yellow() { print_in_color "\e[33m" "$*"; }
+blue() { print_in_color "\e[34m" "$*"; }
+magenta() { print_in_color "\e[35m" "$*"; }
+cyan() { print_in_color "\e[36m" "$*"; }
+bold() { print_in_color "\e[1m" "$*"; }
+underlined() { print_in_color "\e[4m" "$*"; }
+red_bold() { print_in_color "\e[1;31m" "$*"; }
+green_bold() { print_in_color "\e[1;32m" "$*"; }
+yellow_bold() { print_in_color "\e[1;33m" "$*"; }
+blue_bold() { print_in_color "\e[1;34m" "$*"; }
+magenta_bold() { print_in_color "\e[1;35m" "$*"; }
+cyan_bold() { print_in_color "\e[1;36m" "$*"; }
+red_underlined() { print_in_color "\e[4;31m" "$*"; }
+green_underlined() { print_in_color "\e[4;32m" "$*"; }
+yellow_underlined() { print_in_color "\e[4;33m" "$*"; }
+blue_underlined() { print_in_color "\e[4;34m" "$*"; }
+magenta_underlined() { print_in_color "\e[4;35m" "$*"; }
+cyan_underlined() { print_in_color "\e[4;36m" "$*"; }
+
 # src/lib/functions/calculate_hash.sh
-# shellcheck shell=bash
 function calculate_hash() {
   local login password x_ndm_realm x_ndm_challenge
 
@@ -636,8 +667,7 @@ function calculate_hash() {
 }
 
 # src/lib/functions/convert_to.sh
-# shellcheck shell=bash
-convert_to() {
+function convert_to() {
   input_format="${1:?input_format must be set}"
   output_format="${2:?output_format must be set}"
 
@@ -647,45 +677,60 @@ convert_to() {
     </dev/stdin
 }
 
-convert_json_to() {
+function convert_json_to() {
   convert_to "json" "${1}"
 }
 
+# src/lib/functions/get_base_url.sh
+function get_base_url() {
+  base_url="${KEENETIC_BASE_URL}"
+
+  if [[ -z "${base_url}" ]]; then
+    debug "KEENETIC_BASE_URL env is not set, get the value from the --baseurl flag"
+    base_url="${1}"
+  else
+    debug "KEENETIC_BASE_URL env is set, ignore the value from the --baseurl flag"
+  fi
+
+  if ! result=$(validate_base_url "${base_url}"); then
+    error "${result}"
+  fi
+
+  echo "${base_url}"
+}
+
 # src/lib/functions/logging.sh
-# shellcheck shell=bash
 function error() {
-  echo -e "($(date +'%Y-%m-%dT%H:%M:%S')) ERROR: $1" >&2
+  echo -e "($(date +'%Y-%m-%dT%H:%M:%S')) $(red_bold "ERROR: $1")" >&2
   exit 1
 }
 
 function log() {
-  echo -e "($(date +'%Y-%m-%dT%H:%M:%S')) $1" >&2
+  echo -e "($(date +'%Y-%m-%dT%H:%M:%S')) $(green_bold "$1")" >&2
 }
 
 function debug() {
   [[ "$DEBUG" ]] &&
-    echo -e "($(date +'%Y-%m-%dT%H:%M:%S')) DEBUG: $1" >&2
+    echo -e "($(date +'%Y-%m-%dT%H:%M:%S')) $(yellow_bold "DEBUG: $1")" >&2
   return 0
 }
 
 # src/lib/functions/md5_hash.sh
-# shellcheck shell=bash disable=SC2154
+# shellcheck disable=SC2154
 function md5_hash() {
   echo -n "$1" | "${deps[md5]}" | awk '{print $1}'
 }
 
 # src/lib/http/get_http_cookie_path.sh
-# shellcheck shell=bash
 function get_http_cookie_path() {
-  local baseurl
+  local base_url
 
-  baseurl="${1:?baseurl must be set}"
+  base_url="${1:?base_url must be set}"
 
-  echo "${TMPDIR:-/tmp/}keencli-$(md5_hash "${baseurl}").cookie"
+  echo "${TMPDIR:-/tmp/}keencli-$(md5_hash "${base_url}").cookie"
 }
 
 # src/lib/http/get_http_header_value.sh
-# shellcheck shell=bash
 function get_http_header_value() {
   local key response
 
@@ -699,33 +744,34 @@ function get_http_header_value() {
 }
 
 # src/lib/http/get_http_status_code.sh
-# shellcheck shell=bash
 function get_http_status_code() {
   local response
   response="${1:?response must be set}"
 
-  echo "$response" | head -n 1 | grep -e "^HTTP" | awk -F " " '{print $2}'
+  echo "${response}" |
+    head -n 1 |
+    grep -e "^HTTP" |
+    awk -F " " '{print $2}'
 }
 
 # src/lib/http/http_command.sh
-# shellcheck shell=bash
 function http_command() {
-  local baseurl url_path request_data output format
-  baseurl="${KEENETIC_BASE_URL:-$1}"
+  local base_url url_path request_data output format
+  base_url=$(get_base_url "${1}")
   url_path="${2}"
   request_data="${3}"
   output="${4:-/dev/stdout}"
   format="${5}"
 
-  http_login "${baseurl}"
+  http_login "${base_url}"
 
-  debug "Trying ${baseurl}..."
+  log "Trying ${base_url}${url_path}${request_data:+, request_data: ${request_data}}..."
 
   data_path=$(mktemp)
 
   if ! result=$(
     http_request \
-      "${baseurl}" \
+      "${base_url}" \
       "${url_path}" \
       "${request_data}" \
       "${data_path}"
@@ -737,7 +783,7 @@ function http_command() {
   [[ "$status_code" != 2* ]] &&
     error "Request failed${status_code:+, status_code: ${status_code}}"
 
-  debug "Request successful, status_code: ${status_code}"
+  log "Request successful, status_code: ${status_code}"
 
   if [[ -n "${format}" ]]; then
     if ! convert_json_to "${format}" <"${data_path}" >"${output}"; then
@@ -751,7 +797,6 @@ function http_command() {
 }
 
 # src/lib/http/http_login.sh
-# shellcheck shell=bash
 function http_login() {
   local baseurl login password
   baseurl="${1:?baseurl must be set}"
@@ -768,7 +813,7 @@ function http_login() {
 
   status_code=$(get_http_status_code "$result")
   [[ "$status_code" -eq 200 ]] &&
-    debug "Already logged in" &&
+    log "Already logged in" &&
     return 0
 
   [[ "$status_code" -ne 401 ]] &&
@@ -780,6 +825,7 @@ function http_login() {
   [[ -z "$x_ndm_realm" || -z "$x_ndm_challenge" ]] &&
     error "Login failed, required headers not found"
 
+  debug "Calculate hash: realm=${x_ndm_realm}, challenge=${x_ndm_challenge}"
   hash=$(
     calculate_hash \
       "${login}" \
@@ -787,8 +833,9 @@ function http_login() {
       "${x_ndm_realm}" \
       "${x_ndm_challenge}"
   )
+  debug "Hash result: ${hash}"
 
-  debug "Log in to ${baseurl}..."
+  log "Log in to ${baseurl}..."
   if ! result=$(
     http_request_ohir \
       "${baseurl}" \
@@ -802,21 +849,20 @@ function http_login() {
   [[ "$status_code" -ne 200 ]] &&
     error "Login failed${status_code:+, status_code: ${status_code}}"
 
-  debug "Login successful"
+  log "Login successful"
 }
 
 # src/lib/http/http_request.sh
-# shellcheck shell=bash
 function http_request() {
-  local baseurl url_path request_data \
+  local base_url url_path request_data \
     output_path cookie_path
 
-  baseurl="${1:?baseurl must be set}"
+  base_url="${1:?base_url must be set}"
   url_path="${2:?url path must be set}"
   request_data="${3}"
   output_path="${4}"
 
-  cookie_path=$(get_http_cookie_path "${baseurl}")
+  cookie_path=$(get_http_cookie_path "${base_url}")
 
   ARGS=(-sS -D -)
 
@@ -830,7 +876,7 @@ function http_request() {
 
   curl 2>&1 \
     "${ARGS[@]}" \
-    "${baseurl}${url_path}" \
+    "${base_url}${url_path}" \
     --cookie "${cookie_path}" \
     --cookie-jar "${cookie_path}"
 }
@@ -840,19 +886,19 @@ function http_request_ohir() {
   http_request "${1}" "${2}" "${3}" "/dev/null"
 }
 
-# src/lib/validations/validate_baseurl.sh
+# src/lib/validations/validate_base_url.sh
 # shellcheck shell=bash
 
-baseurl_regex="^https?:\/\/((([0-9]{1,3}\.){3}[0-9]{1,3})|([a-zA-Z0-9.-]+(\.[a-zA-Z]{2,4}){1,2}))(:[0-9]+)?$"
+base_url_regex="^https?:\/\/((([0-9]{1,3}\.){3}[0-9]{1,3})|([a-zA-Z0-9.-]+(\.[a-zA-Z]{2,4}){1,2}))(:[0-9]+)?$"
 
-validate_baseurl() {
-  if [[ ! "${1}" =~ ${baseurl_regex} ]]; then
-    echo "Invalid base URL, please see examples"
+validate_base_url() {
+  if [[ ! "${1}" =~ ${base_url_regex} ]]; then
+    echo "Invalid base URL value, please see examples"
+    return 1
   fi
 }
 
 # src/lib/validations/validate_file_path.sh
-# shellcheck shell=bash
 validate_file_path() {
   [[ -d "$1" ]] && echo "File cannot be a directory"
   [[ -d "$(dirname "$1")" ]] ||
@@ -860,7 +906,6 @@ validate_file_path() {
 }
 
 # src/lib/validations/validate_json.sh
-# shellcheck shell=bash disable=SC2154
 validate_json() {
   if ! result=$(echo "$1" | yq -p json 2>&1); then
     echo "${result}"
@@ -871,7 +916,7 @@ validate_json() {
 # :command.function
 keencli_request_command() {
   # src/request_command.sh
-  # shellcheck shell=bash disable=SC2154
+  # shellcheck disable=SC2154
   http_command \
     "${args[--baseurl]}" \
     "${args[url_path]}" \
@@ -884,7 +929,7 @@ keencli_request_command() {
 # :command.function
 keencli_show_system_command() {
   # src/show_system_command.sh
-  # shellcheck shell=bash disable=SC2154
+  # shellcheck disable=SC2154
   url_path="/rci/show/system"
 
   subcommand="${args[subcommand]}"
@@ -904,7 +949,7 @@ keencli_show_system_command() {
 # :command.function
 keencli_show_interface_command() {
   # src/show_interface_command.sh
-  # shellcheck shell=bash disable=SC2154
+  # shellcheck disable=SC2154
   url_path="/rci/show/interface"
 
   subcommand="${args[subcommand]}"
@@ -929,7 +974,7 @@ keencli_show_interface_command() {
 # :command.function
 keencli_show_ip_hotspot_command() {
   # src/show_ip_hotspot_command.sh
-  # shellcheck shell=bash disable=SC2154
+  # shellcheck disable=SC2154
   url_path="/rci/show/ip/hotspot"
 
   mac_address="${args[mac_address]}"
@@ -949,7 +994,7 @@ keencli_show_ip_hotspot_command() {
 # :command.function
 keencli_show_internet_command() {
   # src/show_internet_command.sh
-  # shellcheck shell=bash disable=SC2154
+  # shellcheck disable=SC2154
   url_path="/rci/show/internet/status"
 
   http_command \
@@ -964,7 +1009,7 @@ keencli_show_internet_command() {
 # :command.function
 keencli_config_command() {
   # src/config_command.sh
-  # shellcheck shell=bash disable=SC2154
+  # shellcheck disable=SC2154
   http_command \
     "${args[--baseurl]}" \
     "/ci/${args[system_filename]}.txt" \
@@ -977,7 +1022,7 @@ keencli_config_command() {
 # :command.function
 keencli_log_command() {
   # src/log_command.sh
-  # shellcheck shell=bash disable=SC2154
+  # shellcheck disable=SC2154
   url_path="/ci/log.txt"
 
   http_command \
@@ -992,7 +1037,7 @@ keencli_log_command() {
 # :command.function
 keencli_self_test_command() {
   # src/self_test_command.sh
-  # shellcheck shell=bash disable=SC2154
+  # shellcheck disable=SC2154
   url_path="/ci/log.txt"
 
   http_command \
@@ -1170,8 +1215,8 @@ keencli_request_parse_requirements() {
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
           # :flag.validations
-          if [[ -n $(validate_baseurl "$2") ]]; then
-            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_baseurl "$2")" >&2
+          if [[ -n $(validate_base_url "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_base_url "$2")" >&2
             exit 1
           fi
 
@@ -1386,8 +1431,8 @@ keencli_show_system_parse_requirements() {
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
           # :flag.validations
-          if [[ -n $(validate_baseurl "$2") ]]; then
-            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_baseurl "$2")" >&2
+          if [[ -n $(validate_base_url "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_base_url "$2")" >&2
             exit 1
           fi
 
@@ -1504,8 +1549,8 @@ keencli_show_interface_parse_requirements() {
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
           # :flag.validations
-          if [[ -n $(validate_baseurl "$2") ]]; then
-            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_baseurl "$2")" >&2
+          if [[ -n $(validate_base_url "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_base_url "$2")" >&2
             exit 1
           fi
 
@@ -1693,8 +1738,8 @@ keencli_show_ip_hotspot_parse_requirements() {
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
           # :flag.validations
-          if [[ -n $(validate_baseurl "$2") ]]; then
-            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_baseurl "$2")" >&2
+          if [[ -n $(validate_base_url "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_base_url "$2")" >&2
             exit 1
           fi
 
@@ -1807,8 +1852,8 @@ keencli_show_internet_parse_requirements() {
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
           # :flag.validations
-          if [[ -n $(validate_baseurl "$2") ]]; then
-            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_baseurl "$2")" >&2
+          if [[ -n $(validate_base_url "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_base_url "$2")" >&2
             exit 1
           fi
 
@@ -1915,8 +1960,8 @@ keencli_config_parse_requirements() {
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
           # :flag.validations
-          if [[ -n $(validate_baseurl "$2") ]]; then
-            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_baseurl "$2")" >&2
+          if [[ -n $(validate_base_url "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_base_url "$2")" >&2
             exit 1
           fi
 
@@ -2019,8 +2064,8 @@ keencli_log_parse_requirements() {
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
           # :flag.validations
-          if [[ -n $(validate_baseurl "$2") ]]; then
-            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_baseurl "$2")" >&2
+          if [[ -n $(validate_base_url "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_base_url "$2")" >&2
             exit 1
           fi
 
@@ -2105,8 +2150,8 @@ keencli_self_test_parse_requirements() {
         # :flag.case_arg
         if [[ -n ${2+x} ]]; then
           # :flag.validations
-          if [[ -n $(validate_baseurl "$2") ]]; then
-            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_baseurl "$2")" >&2
+          if [[ -n $(validate_base_url "$2") ]]; then
+            printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_base_url "$2")" >&2
             exit 1
           fi
 

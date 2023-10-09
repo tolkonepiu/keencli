@@ -1,5 +1,4 @@
-# shellcheck shell=bash
-convert_to() {
+function convert_to() {
   input_format="${1:?input_format must be set}"
   output_format="${2:?output_format must be set}"
 
@@ -9,6 +8,6 @@ convert_to() {
     </dev/stdin
 }
 
-convert_json_to() {
+function convert_json_to() {
   convert_to "json" "${1}"
 }

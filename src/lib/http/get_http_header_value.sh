@@ -1,4 +1,3 @@
-# shellcheck shell=bash
 function get_http_header_value() {
   local key response
 

@@ -11,7 +11,9 @@ dependencies:
 
 environment_variables:
   - name: KEENETIC_BASE_URL
-    help: Keenetic base URL
+    help: >
+      Keenetic base URL (example `http://192.168.1.1`,
+      `https://myrouter01.keenetic.link`)
   - name: KEENETIC_USERNAME
     help: Keenetic username
     required: true
@@ -42,7 +44,7 @@ commands:
           Keenetic base URL (example `http://192.168.1.1`,
           `https://myrouter01.keenetic.link`)
         default: http://192.168.1.1
-        validate: baseurl
+        validate: base_url
       - &output
         long: --output
         short: -o

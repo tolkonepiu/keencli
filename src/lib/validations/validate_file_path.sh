@@ -1,4 +1,3 @@
-# shellcheck shell=bash
 validate_file_path() {
   [[ -d "$1" ]] && echo "File cannot be a directory"
   [[ -d "$(dirname "$1")" ]] ||

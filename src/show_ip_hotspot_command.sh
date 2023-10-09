@@ -1,4 +1,4 @@
-# shellcheck shell=bash disable=SC2154
+# shellcheck disable=SC2154
 url_path="/rci/show/ip/hotspot"
 
 mac_address="${args[mac_address]}"
