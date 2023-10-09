@@ -57,6 +57,12 @@ To turn on debugging output:
 DEBUG=1 keencli <command> <subcommand>
 ```
 
+To turn off color output:
+
+```sh
+NO_COLOR=1 keencli <command> <subcommand>
+```
+
 ## Development
 
 keencli uses [bashly](https://github.com/DannyBen/bashly/) for generating
