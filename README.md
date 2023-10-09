@@ -1,8 +1,14 @@
+<div align='center'>
+
 # keencli
 
-Bash script to control Keenetic routers via HTTP API.
+Bash script to control Keenetic routers via HTTP API
+
+---
 
 [![keencli](keencli.gif)](https://asciinema.org/a/612771?autoplay=1)
+
+</div>
 
 ## Requirements
 
