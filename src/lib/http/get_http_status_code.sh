@@ -3,7 +3,8 @@ function get_http_status_code() {
   response="${1:?response must be set}"
 
   echo "${response}" |
-    head -n 1 |
+    tail -n +1 |
+    head -1 |
     grep -e "^HTTP" |
     awk -F " " '{print $2}'
 }
