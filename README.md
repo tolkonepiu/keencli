@@ -40,7 +40,7 @@ Tested with KeeneticOS 3.5+
 Download bash script there and make it executable:
 
 ```sh
-wget https://github.com/tolkonepiu/keencli/raw/main/keencli/
+wget https://github.com/tolkonepiu/keencli/raw/main/keencli
 chmod +x keencli
 ```
 
