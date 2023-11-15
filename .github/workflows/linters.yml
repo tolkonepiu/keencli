@@ -79,7 +79,7 @@ jobs:
         run: gem install bashly -v "${BASHLY_VERSION}"
         env:
           # renovate: datasource=github-releases depName=DannyBen/bashly
-          BASHLY_VERSION: 1.1.1
+          BASHLY_VERSION: 1.1.2
       - name: 🚀 Run bashly
         run: bashly generate --upgrade
       - name: suggester / bashly
