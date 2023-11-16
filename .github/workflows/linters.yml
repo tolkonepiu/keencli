@@ -86,5 +86,6 @@ jobs:
         uses: reviewdog/action-suggester@v1
         with:
           tool_name: bashly
+          filter_mode: nofilter
           fail_on_error: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
