@@ -15,7 +15,7 @@ jobs:
         uses: mig4/setup-bats@v1
         with:
           # renovate: datasource=github-releases depName=bats-core/bats-core
-          bats-version: 1.10.0
+          bats-version: 1.11.0
 
       - name: ⤵️ Check out code
         uses: actions/checkout@v4
