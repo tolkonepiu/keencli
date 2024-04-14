@@ -62,12 +62,12 @@ keencli_usage() {
     echo
 
     # :environment_variable.usage
-    printf "  %s\n" "KEENETIC_USERNAME (required)"
+    printf "  %s\n" "KEENETIC_USERNAME"
     printf "    Keenetic username\n"
     echo
 
     # :environment_variable.usage
-    printf "  %s\n" "KEENETIC_PASSWORD (required)"
+    printf "  %s\n" "KEENETIC_PASSWORD"
     printf "    Keenetic password\n"
     echo
 
@@ -164,6 +164,7 @@ keencli_show_usage() {
   printf "  %s   Interface status\n" "interface"
   printf "  %s   IP information\n" "ip       "
   printf "  %s   Internet check status\n" "internet "
+  printf "  %s   Show NTCE information\n" "ntce     "
   echo
 
   # :command.long_usage
@@ -294,6 +295,12 @@ keencli_show_interface_usage() {
     printf "    Allowed: stat\n"
     echo
 
+    # :command.usage_examples
+    printf "%s\n" "Examples:"
+    printf "  keencli show interface GigabitEthernet0\n"
+    printf "  keencli show interface GigabitEthernet0 stat\n"
+    echo
+
   fi
 }
 
@@ -315,7 +322,7 @@ keencli_show_ip_usage() {
   echo
   # :command.usage_commands
   printf "%s\n" "Commands:"
-  printf "  %s   Hotspot hosts\n" "hotspot"
+  printf "  %s   Hotspots\n" "hotspot"
   echo
 
   # :command.long_usage
@@ -333,18 +340,52 @@ keencli_show_ip_usage() {
 # :command.usage
 keencli_show_ip_hotspot_usage() {
   if [[ -n $long_usage ]]; then
-    printf "keencli show ip hotspot - Hotspot hosts\n"
+    printf "keencli show ip hotspot - Hotspots\n"
     echo
 
   else
-    printf "keencli show ip hotspot - Hotspot hosts\n"
+    printf "keencli show ip hotspot - Hotspots\n"
     echo
 
   fi
 
   printf "%s\n" "Usage:"
-  printf "  keencli show ip hotspot [MAC_ADDRESS] [OPTIONS]\n"
-  printf "  keencli show ip hotspot --help | -h\n"
+  printf "  keencli show ip hotspot COMMAND\n"
+  printf "  keencli show ip hotspot [COMMAND] --help | -h\n"
+  echo
+  # :command.usage_commands
+  printf "%s\n" "Commands:"
+  printf "  %s   Hotspot list\n" "list   "
+  printf "  %s   Hotspot summary\n" "summary"
+  echo
+
+  # :command.long_usage
+  if [[ -n $long_usage ]]; then
+    printf "%s\n" "Options:"
+
+    # :command.usage_fixed_flags
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+keencli_show_ip_hotspot_list_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "keencli show ip hotspot list - Hotspot list\n"
+    echo
+
+  else
+    printf "keencli show ip hotspot list - Hotspot list\n"
+    echo
+
+  fi
+
+  printf "%s\n" "Usage:"
+  printf "  keencli show ip hotspot list [OPTIONS]\n"
+  printf "  keencli show ip hotspot list --help | -h\n"
   echo
 
   # :command.long_usage
@@ -352,6 +393,11 @@ keencli_show_ip_hotspot_usage() {
     printf "%s\n" "Options:"
 
     # :command.usage_flags
+    # :flag.usage
+    printf "  %s\n" "--mac_address MAC_ADDRESS"
+    printf "    MAC address (example \`b0:c2:b9:aa:0d:dd\`)\n"
+    echo
+
     # :flag.usage
     printf "  %s\n" "--baseurl BASEURL"
     printf "    Keenetic base URL (example \`http://192.168.1.1\`,\n    \`https://myrouter01.keenetic.link\`)\n"
@@ -375,12 +421,84 @@ keencli_show_ip_hotspot_usage() {
     printf "    Show this help\n"
     echo
 
-    # :command.usage_args
-    printf "%s\n" "Arguments:"
+    # :command.usage_examples
+    printf "%s\n" "Examples:"
+    printf "  keencli show ip hotspot list\n"
+    printf "  keencli show ip hotspot list --mac_address b0:c2:b9:aa:0d:dd\n"
+    echo
 
-    # :argument.usage
-    printf "  %s\n" "MAC_ADDRESS"
-    printf "    MAC address (example \`b0:c2:b9:aa:0d:dd\`)\n"
+  fi
+}
+
+# :command.usage
+keencli_show_ip_hotspot_summary_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "keencli show ip hotspot summary - Hotspot summary\n"
+    echo
+
+  else
+    printf "keencli show ip hotspot summary - Hotspot summary\n"
+    echo
+
+  fi
+
+  printf "%s\n" "Usage:"
+  printf "  keencli show ip hotspot summary [OPTIONS]\n"
+  printf "  keencli show ip hotspot summary --help | -h\n"
+  echo
+
+  # :command.long_usage
+  if [[ -n $long_usage ]]; then
+    printf "%s\n" "Options:"
+
+    # :command.usage_flags
+    # :flag.usage
+    printf "  %s\n" "--metric_type METRIC_TYPE"
+    printf "    Specifies the type of metric\n    Available options:\n    sumbytes - total number of bytes transferred within the network client over\n    a specified period\n    sumspeed - average speed within the network client over a specified period\n"
+    printf "    Allowed: sumbytes, sumspeed\n"
+    printf "    Default: sumbytes\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--count COUNT"
+    printf "    Number of items\n"
+    printf "    Default: 5\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--time_period TIME_PERIOD"
+    printf "    Time period\n    \n    Available options:\n    3m  - last 3 minutes\n    1h  - last 1 hour\n    3h  - last 3 hours\n    24h - last 24 hours\n"
+    printf "    Allowed: 3m, 1h, 3h, 24h\n"
+    printf "    Default: 3m\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--baseurl BASEURL"
+    printf "    Keenetic base URL (example \`http://192.168.1.1\`,\n    \`https://myrouter01.keenetic.link\`)\n"
+    printf "    Default: http://192.168.1.1\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--output, -o OUTPUT"
+    printf "    Write to file instead of stdout\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--format, -f FORMAT"
+    printf "    Output format type\n"
+    printf "    Allowed: json, yaml, xml, props\n"
+    printf "    Default: yaml\n"
+    echo
+
+    # :command.usage_fixed_flags
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
+    echo
+
+    # :command.usage_examples
+    printf "%s\n" "Examples:"
+    printf "  keencli show ip hotspot summary\n"
+    printf "  keencli show ip hotspot summary --metric_type sumspeed --time_period 24h\n  --count 20\n"
     echo
 
   fi
@@ -431,6 +549,125 @@ keencli_show_internet_usage() {
     printf "    Show this help\n"
     echo
 
+    # :command.usage_examples
+    printf "%s\n" "Examples:"
+    printf "  keencli show internet\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+keencli_show_ntce_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "keencli show ntce - Show NTCE information\n"
+    echo
+
+  else
+    printf "keencli show ntce - Show NTCE information\n"
+    echo
+
+  fi
+
+  printf "%s\n" "Usage:"
+  printf "  keencli show ntce COMMAND\n"
+  printf "  keencli show ntce [COMMAND] --help | -h\n"
+  echo
+  # :command.usage_commands
+  printf "%s\n" "Commands:"
+  printf "  %s   Show NTCE summary\n" "summary"
+  echo
+
+  # :command.long_usage
+  if [[ -n $long_usage ]]; then
+    printf "%s\n" "Options:"
+
+    # :command.usage_fixed_flags
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+keencli_show_ntce_summary_usage() {
+  if [[ -n $long_usage ]]; then
+    printf "keencli show ntce summary - Show NTCE summary\n"
+    echo
+
+  else
+    printf "keencli show ntce summary - Show NTCE summary\n"
+    echo
+
+  fi
+
+  printf "%s\n" "Usage:"
+  printf "  keencli show ntce summary [OPTIONS]\n"
+  printf "  keencli show ntce summary --help | -h\n"
+  echo
+
+  # :command.long_usage
+  if [[ -n $long_usage ]]; then
+    printf "%s\n" "Options:"
+
+    # :command.usage_flags
+    # :flag.usage
+    printf "  %s\n" "--traffic_type TRAFFIC_TYPE"
+    printf "    Specifies the type of traffic segmentation\n    Available options:\n    application - segmentation of traffic based on applications\n    group       - Segmentation of traffic based on general types, such as\n    calling, surfing, file transferring, etc.\n"
+    printf "    Allowed: application, group\n"
+    printf "    Default: application\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--metric_type METRIC_TYPE"
+    printf "    Specifies the type of metric\n    Available options:\n    sumbytes - total number of bytes transferred within the network client over\n    a specified period\n    sumspeed - average speed within the network client over a specified period\n"
+    printf "    Allowed: sumbytes, sumspeed\n"
+    printf "    Default: sumbytes\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--count COUNT"
+    printf "    Number of items\n"
+    printf "    Default: 5\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--time_period TIME_PERIOD"
+    printf "    Time period\n    \n    Available options:\n    3m  - last 3 minutes\n    1h  - last 1 hour\n    3h  - last 3 hours\n    24h - last 24 hours\n"
+    printf "    Allowed: 3m, 1h, 3h, 24h\n"
+    printf "    Default: 3m\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--baseurl BASEURL"
+    printf "    Keenetic base URL (example \`http://192.168.1.1\`,\n    \`https://myrouter01.keenetic.link\`)\n"
+    printf "    Default: http://192.168.1.1\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--output, -o OUTPUT"
+    printf "    Write to file instead of stdout\n"
+    echo
+
+    # :flag.usage
+    printf "  %s\n" "--format, -f FORMAT"
+    printf "    Output format type\n"
+    printf "    Allowed: json, yaml, xml, props\n"
+    printf "    Default: yaml\n"
+    echo
+
+    # :command.usage_fixed_flags
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
+    echo
+
+    # :command.usage_examples
+    printf "%s\n" "Examples:"
+    printf "  keencli show ntce summary\n"
+    printf "  keencli show ntce summary --time_period 24h --metric_type sumspeed\n  --traffic_type group --count 20\n"
+    echo
+
   fi
 }
 
@@ -477,8 +714,14 @@ keencli_config_usage() {
 
     # :argument.usage
     printf "  %s\n" "CONFIGURATION_FILE"
-    printf "    System configuration file\n    Available options:\n    default-config - factory default settings for this device\n    running-config - current settings for this device\n    startup-config - set of commands that runs when the system starts\n"
+    printf "    System configuration files\n    Available options:\n    default-config - factory default settings for this device\n    running-config - current settings for this device\n    startup-config - set of commands that runs when the system starts\n"
     printf "    Allowed: startup-config, default-config, running-config\n"
+    echo
+
+    # :command.usage_examples
+    printf "%s\n" "Examples:"
+    printf "  keencli config startup-config\n"
+    printf "  keencli config default-config --output default-config.txt\n"
     echo
 
   fi
@@ -522,6 +765,12 @@ keencli_log_usage() {
     printf "    Show this help\n"
     echo
 
+    # :command.usage_examples
+    printf "%s\n" "Examples:"
+    printf "  keencli log\n"
+    printf "  keencli log --output log.txt\n"
+    echo
+
   fi
 }
 
@@ -561,6 +810,12 @@ keencli_self_test_usage() {
     # :command.usage_fixed_flags
     printf "  %s\n" "--help, -h"
     printf "    Show this help\n"
+    echo
+
+    # :command.usage_examples
+    printf "%s\n" "Examples:"
+    printf "  keencli self-test\n"
+    printf "  keencli self-test --output self-test.txt\n"
     echo
 
   fi
@@ -717,6 +972,27 @@ function get_base_url() {
   fi
 
   echo "${base_url}"
+}
+
+# src/lib/functions/get_time_period.sh
+function get_time_period() {
+  case "${1:?time_period must be set}" in
+    3m)
+      echo 0
+      ;;
+    1h)
+      echo 1
+      ;;
+    3h)
+      echo 2
+      ;;
+    24h)
+      echo 3
+      ;;
+    *)
+      error "Unknown time period ${1}"
+      ;;
+  esac
 }
 
 # src/lib/functions/logging.sh
@@ -991,15 +1267,34 @@ keencli_show_interface_command() {
 }
 
 # :command.function
-keencli_show_ip_hotspot_command() {
-  # src/show_ip_hotspot_command.sh
+keencli_show_ip_hotspot_list_command() {
+  # src/show_ip_hotspot_list_command.sh
   # shellcheck disable=SC2154
   url_path="/rci/show/ip/hotspot"
 
-  mac_address="${args[mac_address]}"
+  mac_address="${args[--mac_address]}"
   if [[ -n "${mac_address}" ]]; then
     url_path="${url_path}?mac=${mac_address}"
   fi
+
+  http_command \
+    "${args[--baseurl]}" \
+    "${url_path}" \
+    "${args[request_data]}" \
+    "${args[--output]}" \
+    "${args[--format]}"
+
+}
+
+# :command.function
+keencli_show_ip_hotspot_summary_command() {
+  # src/show_ip_hotspot_summary_command.sh
+  # shellcheck disable=SC2154
+  metric_type="${args[--metric_type]}"
+  count="${args[--count]}"
+  time_period=$(get_time_period "${args[--time_period]}")
+
+  url_path="/rci/show/ip/hotspot/summary?attribute=${metric_type}&count=${count}&detail=${time_period}"
 
   http_command \
     "${args[--baseurl]}" \
@@ -1026,12 +1321,32 @@ keencli_show_internet_command() {
 }
 
 # :command.function
+keencli_show_ntce_summary_command() {
+  # src/show_ntce_summary_command.sh
+  # shellcheck disable=SC2154
+  traffic_type="${args[--traffic_type]}"
+  metric_type="${args[--metric_type]}"
+  count="${args[--count]}"
+  time_period=$(get_time_period "${args[--time_period]}")
+
+  url_path="/rci/show/ntce/summary?${traffic_type}=true&attrib=${metric_type}&count=${count}&detail=${time_period}"
+
+  http_command \
+    "${args[--baseurl]}" \
+    "${url_path}" \
+    "${args[request_data]}" \
+    "${args[--output]}" \
+    "${args[--format]}"
+
+}
+
+# :command.function
 keencli_config_command() {
   # src/config_command.sh
   # shellcheck disable=SC2154
   http_command \
     "${args[--baseurl]}" \
-    "/ci/${args[system_filename]}.txt" \
+    "/ci/${args[configuration_file]}.txt" \
     "${args[request_data]}" \
     "${args[--output]}" \
     "${args[--format]}"
@@ -1096,14 +1411,6 @@ parse_requirements() {
   env_var_names+=("KEENETIC_BASE_URL")
   env_var_names+=("KEENETIC_USERNAME")
   env_var_names+=("KEENETIC_PASSWORD")
-  if [[ -z "${KEENETIC_USERNAME:-}" ]]; then
-    printf "missing required environment variable: KEENETIC_USERNAME\n" >&2
-    exit 1
-  fi
-  if [[ -z "${KEENETIC_PASSWORD:-}" ]]; then
-    printf "missing required environment variable: KEENETIC_PASSWORD\n" >&2
-    exit 1
-  fi
 
   # :command.dependencies_filter
   if command -v curl >/dev/null 2>&1; then
@@ -1384,6 +1691,13 @@ keencli_show_parse_requirements() {
       action="internet"
       shift
       keencli_show_internet_parse_requirements "$@"
+      shift $#
+      ;;
+
+    ntce)
+      action="ntce"
+      shift
+      keencli_show_ntce_parse_requirements "$@"
       shift $#
       ;;
 
@@ -1749,12 +2063,100 @@ keencli_show_ip_hotspot_parse_requirements() {
   done
 
   # :command.command_filter
-  action="show ip hotspot"
+  action=${1:-}
+
+  case $action in
+    -*) ;;
+
+    list)
+      action="list"
+      shift
+      keencli_show_ip_hotspot_list_parse_requirements "$@"
+      shift $#
+      ;;
+
+    summary)
+      action="summary"
+      shift
+      keencli_show_ip_hotspot_summary_parse_requirements "$@"
+      shift $#
+      ;;
+
+    # :command.command_fallback
+    "")
+      keencli_show_ip_hotspot_usage >&2
+      exit 1
+      ;;
+
+    *)
+      printf "invalid command: %s\n" "$action" >&2
+      exit 1
+      ;;
+
+  esac
 
   # :command.parse_requirements_while
   while [[ $# -gt 0 ]]; do
     key="$1"
     case "$key" in
+
+      -?*)
+        printf "invalid option: %s\n" "$key" >&2
+        exit 1
+        ;;
+
+      *)
+        # :command.parse_requirements_case
+        # :command.parse_requirements_case_simple
+        printf "invalid argument: %s\n" "$key" >&2
+        exit 1
+
+        ;;
+
+    esac
+  done
+
+}
+
+# :command.parse_requirements
+keencli_show_ip_hotspot_list_parse_requirements() {
+  # :command.fixed_flags_filter
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+      --help | -h)
+        long_usage=yes
+        keencli_show_ip_hotspot_list_usage
+        exit
+        ;;
+
+      *)
+        break
+        ;;
+
+    esac
+  done
+
+  # :command.command_filter
+  action="show ip hotspot list"
+
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+      # :flag.case
+      --mac_address)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          args['--mac_address']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--mac_address requires an argument: --mac_address MAC_ADDRESS" >&2
+          exit 1
+        fi
+        ;;
+
       # :flag.case
       --baseurl)
 
@@ -1805,14 +2207,8 @@ keencli_show_ip_hotspot_parse_requirements() {
       *)
         # :command.parse_requirements_case
         # :command.parse_requirements_case_simple
-        # :argument.case
-        if [[ -z ${args['mac_address']+x} ]]; then
-          args['mac_address']=$1
-          shift
-        else
-          printf "invalid argument: %s\n" "$key" >&2
-          exit 1
-        fi
+        printf "invalid argument: %s\n" "$key" >&2
+        exit 1
 
         ;;
 
@@ -1837,6 +2233,167 @@ keencli_show_ip_hotspot_parse_requirements() {
   fi
 
   # :command.whitelist_filter
+  if [[ ${args['--format']:-} ]] && [[ ! ${args['--format']:-} =~ ^(json|yaml|xml|props)$ ]]; then
+    printf "%s\n" "--format must be one of: json, yaml, xml, props" >&2
+    exit 1
+  fi
+
+}
+
+# :command.parse_requirements
+keencli_show_ip_hotspot_summary_parse_requirements() {
+  # :command.fixed_flags_filter
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+      --help | -h)
+        long_usage=yes
+        keencli_show_ip_hotspot_summary_usage
+        exit
+        ;;
+
+      *)
+        break
+        ;;
+
+    esac
+  done
+
+  # :command.command_filter
+  action="show ip hotspot summary"
+
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+      # :flag.case
+      --metric_type)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          args['--metric_type']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--metric_type requires an argument: --metric_type METRIC_TYPE" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --count)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          args['--count']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--count requires an argument: --count COUNT" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --time_period)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          args['--time_period']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--time_period requires an argument: --time_period TIME_PERIOD" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --baseurl)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          args['--baseurl']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--baseurl requires an argument: --baseurl BASEURL" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --output | -o)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          args['--output']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--output requires an argument: --output, -o OUTPUT" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --format | -f)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          args['--format']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--format requires an argument: --format, -f FORMAT" >&2
+          exit 1
+        fi
+        ;;
+
+      -?*)
+        printf "invalid option: %s\n" "$key" >&2
+        exit 1
+        ;;
+
+      *)
+        # :command.parse_requirements_case
+        # :command.parse_requirements_case_simple
+        printf "invalid argument: %s\n" "$key" >&2
+        exit 1
+
+        ;;
+
+    esac
+  done
+
+  # :command.default_assignments
+  [[ -n ${args['--metric_type']:-} ]] || args['--metric_type']="sumbytes"
+  [[ -n ${args['--count']:-} ]] || args['--count']="5"
+  [[ -n ${args['--time_period']:-} ]] || args['--time_period']="3m"
+  [[ -n ${args['--baseurl']:-} ]] || args['--baseurl']="http://192.168.1.1"
+  [[ -n ${args['--format']:-} ]] || args['--format']="yaml"
+
+  # :command.validations
+  # :flag.validations
+  if [[ -v args['--baseurl'] && -n $(validate_base_url "${args['--baseurl']:-}") ]]; then
+    printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_base_url "${args['--baseurl']:-}")" >&2
+    exit 1
+  fi
+
+  # :flag.validations
+  if [[ -v args['--output'] && -n $(validate_file_path "${args['--output']:-}") ]]; then
+    printf "validation error in %s:\n%s\n" "--output, -o OUTPUT" "$(validate_file_path "${args['--output']:-}")" >&2
+    exit 1
+  fi
+
+  # :command.whitelist_filter
+  if [[ ${args['--metric_type']:-} ]] && [[ ! ${args['--metric_type']:-} =~ ^(sumbytes|sumspeed)$ ]]; then
+    printf "%s\n" "--metric_type must be one of: sumbytes, sumspeed" >&2
+    exit 1
+  fi
+  if [[ ${args['--time_period']:-} ]] && [[ ! ${args['--time_period']:-} =~ ^(3m|1h|3h|24h)$ ]]; then
+    printf "%s\n" "--time_period must be one of: 3m, 1h, 3h, 24h" >&2
+    exit 1
+  fi
   if [[ ${args['--format']:-} ]] && [[ ! ${args['--format']:-} =~ ^(json|yaml|xml|props)$ ]]; then
     printf "%s\n" "--format must be one of: json, yaml, xml, props" >&2
     exit 1
@@ -1945,6 +2502,253 @@ keencli_show_internet_parse_requirements() {
   fi
 
   # :command.whitelist_filter
+  if [[ ${args['--format']:-} ]] && [[ ! ${args['--format']:-} =~ ^(json|yaml|xml|props)$ ]]; then
+    printf "%s\n" "--format must be one of: json, yaml, xml, props" >&2
+    exit 1
+  fi
+
+}
+
+# :command.parse_requirements
+keencli_show_ntce_parse_requirements() {
+  # :command.fixed_flags_filter
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+      --help | -h)
+        long_usage=yes
+        keencli_show_ntce_usage
+        exit
+        ;;
+
+      *)
+        break
+        ;;
+
+    esac
+  done
+
+  # :command.command_filter
+  action=${1:-}
+
+  case $action in
+    -*) ;;
+
+    summary)
+      action="summary"
+      shift
+      keencli_show_ntce_summary_parse_requirements "$@"
+      shift $#
+      ;;
+
+    # :command.command_fallback
+    "")
+      keencli_show_ntce_usage >&2
+      exit 1
+      ;;
+
+    *)
+      printf "invalid command: %s\n" "$action" >&2
+      exit 1
+      ;;
+
+  esac
+
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+
+      -?*)
+        printf "invalid option: %s\n" "$key" >&2
+        exit 1
+        ;;
+
+      *)
+        # :command.parse_requirements_case
+        # :command.parse_requirements_case_simple
+        printf "invalid argument: %s\n" "$key" >&2
+        exit 1
+
+        ;;
+
+    esac
+  done
+
+}
+
+# :command.parse_requirements
+keencli_show_ntce_summary_parse_requirements() {
+  # :command.fixed_flags_filter
+  while [[ $# -gt 0 ]]; do
+    case "${1:-}" in
+      --help | -h)
+        long_usage=yes
+        keencli_show_ntce_summary_usage
+        exit
+        ;;
+
+      *)
+        break
+        ;;
+
+    esac
+  done
+
+  # :command.command_filter
+  action="show ntce summary"
+
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+      # :flag.case
+      --traffic_type)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          args['--traffic_type']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--traffic_type requires an argument: --traffic_type TRAFFIC_TYPE" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --metric_type)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          args['--metric_type']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--metric_type requires an argument: --metric_type METRIC_TYPE" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --count)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          args['--count']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--count requires an argument: --count COUNT" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --time_period)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          args['--time_period']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--time_period requires an argument: --time_period TIME_PERIOD" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --baseurl)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          args['--baseurl']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--baseurl requires an argument: --baseurl BASEURL" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --output | -o)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          args['--output']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--output requires an argument: --output, -o OUTPUT" >&2
+          exit 1
+        fi
+        ;;
+
+      # :flag.case
+      --format | -f)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          args['--format']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--format requires an argument: --format, -f FORMAT" >&2
+          exit 1
+        fi
+        ;;
+
+      -?*)
+        printf "invalid option: %s\n" "$key" >&2
+        exit 1
+        ;;
+
+      *)
+        # :command.parse_requirements_case
+        # :command.parse_requirements_case_simple
+        printf "invalid argument: %s\n" "$key" >&2
+        exit 1
+
+        ;;
+
+    esac
+  done
+
+  # :command.default_assignments
+  [[ -n ${args['--traffic_type']:-} ]] || args['--traffic_type']="application"
+  [[ -n ${args['--metric_type']:-} ]] || args['--metric_type']="sumbytes"
+  [[ -n ${args['--count']:-} ]] || args['--count']="5"
+  [[ -n ${args['--time_period']:-} ]] || args['--time_period']="3m"
+  [[ -n ${args['--baseurl']:-} ]] || args['--baseurl']="http://192.168.1.1"
+  [[ -n ${args['--format']:-} ]] || args['--format']="yaml"
+
+  # :command.validations
+  # :flag.validations
+  if [[ -v args['--baseurl'] && -n $(validate_base_url "${args['--baseurl']:-}") ]]; then
+    printf "validation error in %s:\n%s\n" "--baseurl BASEURL" "$(validate_base_url "${args['--baseurl']:-}")" >&2
+    exit 1
+  fi
+
+  # :flag.validations
+  if [[ -v args['--output'] && -n $(validate_file_path "${args['--output']:-}") ]]; then
+    printf "validation error in %s:\n%s\n" "--output, -o OUTPUT" "$(validate_file_path "${args['--output']:-}")" >&2
+    exit 1
+  fi
+
+  # :command.whitelist_filter
+  if [[ ${args['--traffic_type']:-} ]] && [[ ! ${args['--traffic_type']:-} =~ ^(application|group)$ ]]; then
+    printf "%s\n" "--traffic_type must be one of: application, group" >&2
+    exit 1
+  fi
+  if [[ ${args['--metric_type']:-} ]] && [[ ! ${args['--metric_type']:-} =~ ^(sumbytes|sumspeed)$ ]]; then
+    printf "%s\n" "--metric_type must be one of: sumbytes, sumspeed" >&2
+    exit 1
+  fi
+  if [[ ${args['--time_period']:-} ]] && [[ ! ${args['--time_period']:-} =~ ^(3m|1h|3h|24h)$ ]]; then
+    printf "%s\n" "--time_period must be one of: 3m, 1h, 3h, 24h" >&2
+    exit 1
+  fi
   if [[ ${args['--format']:-} ]] && [[ ! ${args['--format']:-} =~ ^(json|yaml|xml|props)$ ]]; then
     printf "%s\n" "--format must be one of: json, yaml, xml, props" >&2
     exit 1
@@ -2233,7 +3037,7 @@ keencli_self_test_parse_requirements() {
 
 # :command.initialize
 initialize() {
-  version="0.3.0"
+  version="0.4.0"
   long_usage=''
   set -e
 
@@ -2256,7 +3060,11 @@ run() {
     "show interface") keencli_show_interface_command ;;
     "show ip") keencli_show_ip_command ;;
     "show ip hotspot") keencli_show_ip_hotspot_command ;;
+    "show ip hotspot list") keencli_show_ip_hotspot_list_command ;;
+    "show ip hotspot summary") keencli_show_ip_hotspot_summary_command ;;
     "show internet") keencli_show_internet_command ;;
+    "show ntce") keencli_show_ntce_command ;;
+    "show ntce summary") keencli_show_ntce_summary_command ;;
     "config") keencli_config_command ;;
     "log") keencli_log_command ;;
     "self-test") keencli_self_test_command ;;
