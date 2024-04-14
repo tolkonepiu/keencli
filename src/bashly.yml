@@ -16,10 +16,8 @@ environment_variables:
       `https://myrouter01.keenetic.link`)
   - name: KEENETIC_USERNAME
     help: Keenetic username
-    required: true
   - name: KEENETIC_PASSWORD
     help: Keenetic password
-    required: true
 
 commands:
   - name: request
@@ -122,24 +120,118 @@ commands:
                 stat - interface statistics
             allowed:
               - stat
+        examples:
+          - keencli show interface GigabitEthernet0
+          - keencli show interface GigabitEthernet0 stat
       - name: ip
         help: IP information
         commands:
           - name: hotspot
-            help: Hotspot hosts
-            flags:
-              - *baseurl
-              - *output
-              - *format
-            args:
-              - name: mac_address
-                help: MAC address (example `b0:c2:b9:aa:0d:dd`)
+            help: Hotspots
+            commands:
+              - name: list
+                help: Hotspot list
+                flags:
+                  - long: --mac_address
+                    arg: mac_address
+                    help: >
+                      MAC address (example `b0:c2:b9:aa:0d:dd`)
+                  - *baseurl
+                  - *output
+                  - *format
+                examples:
+                  - keencli show ip hotspot list
+                  - keencli show ip hotspot list --mac_address b0:c2:b9:aa:0d:dd
+              - name: summary
+                help: Hotspot summary
+                flags:
+                  - &metric_type
+                    long: --metric_type
+                    arg: metric_type
+                    default: sumbytes
+                    allowed:
+                      - sumbytes
+                      - sumspeed
+                    help: >
+                      Specifies the type of metric
+
+                      Available options:
+
+                      sumbytes - total number of bytes transferred within the
+                      network client over a specified period
+
+                      sumspeed - average speed within the network client over a
+                      specified period
+                  - &count
+                    long: --count
+                    arg: count
+                    default: "5"
+                    help: Number of items
+                  - &time_period
+                    long: --time_period
+                    arg: time_period
+                    default: "3m"
+                    allowed:
+                      - "3m"
+                      - "1h"
+                      - "3h"
+                      - "24h"
+                    help: |
+                      Time period
+
+                      Available options:
+                      3m  - last 3 minutes
+                      1h  - last 1 hour
+                      3h  - last 3 hours
+                      24h - last 24 hours
+                  - *baseurl
+                  - *output
+                  - *format
+                examples:
+                  - keencli show ip hotspot summary
+                  - >-
+                    keencli show ip hotspot summary --metric_type sumspeed
+                    --time_period 24h --count 20
       - name: internet
         help: Internet check status
         flags:
           - *baseurl
           - *output
           - *format
+        examples:
+          - keencli show internet
+      - name: ntce
+        help: Show NTCE information
+        commands:
+          - name: summary
+            help: Show NTCE summary
+            flags:
+              - long: --traffic_type
+                arg: traffic_type
+                default: application
+                allowed:
+                  - application
+                  - group
+                help: >
+                  Specifies the type of traffic segmentation
+
+                  Available options:
+
+                  application - segmentation of traffic based on applications
+
+                  group       - Segmentation of traffic based on general types, such
+                  as calling, surfing, file transferring, etc.
+              - *metric_type
+              - *count
+              - *time_period
+              - *baseurl
+              - *output
+              - *format
+            examples:
+              - keencli show ntce summary
+              - >-
+                keencli show ntce summary --time_period 24h --metric_type
+                sumspeed --traffic_type group --count 20
   - name: config
     help: Configuration files
     flags:
@@ -148,7 +240,7 @@ commands:
     args:
       - name: configuration_file
         help: >
-          System configuration file
+          System configuration files
 
           Available options:
 
@@ -163,13 +255,22 @@ commands:
           - startup-config
           - default-config
           - running-config
+    examples:
+      - keencli config startup-config
+      - keencli config default-config --output default-config.txt
   - name: log
     help: System event log for system diagnostics
     flags:
       - *baseurl
       - *output
+    examples:
+      - keencli log
+      - keencli log --output log.txt
   - name: self-test
     help: Full diagnostic information about this device
     flags:
       - *baseurl
       - *output
+    examples:
+      - keencli self-test
+      - keencli self-test --output self-test.txt
