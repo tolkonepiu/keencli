@@ -13,7 +13,7 @@ function get_time_period() {
     echo 3
     ;;
   *)
-    echo "Unknown time period ${1}" && exit 1
+    error "Unknown time period ${1}"
     ;;
   esac
 }
