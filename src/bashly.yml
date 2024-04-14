@@ -219,8 +219,8 @@ commands:
 
                   application - segmentation of traffic based on applications
 
-                  group       - Segmentation of traffic based on general types, such
-                  as calling, surfing, file transferring, etc.
+                  group       - Segmentation of traffic based on general types,
+                  such as calling, surfing, file transferring, etc.
               - *metric_type
               - *count
               - *time_period

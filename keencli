@@ -977,21 +977,21 @@ function get_base_url() {
 # src/lib/functions/get_time_period.sh
 function get_time_period() {
   case "${1:?time_period must be set}" in
-  3m)
-    echo 0
-    ;;
-  1h)
-    echo 1
-    ;;
-  3h)
-    echo 2
-    ;;
-  24h)
-    echo 3
-    ;;
-  *)
-    echo "Unknown time period ${1}" && exit 1
-    ;;
+    3m)
+      echo 0
+      ;;
+    1h)
+      echo 1
+      ;;
+    3h)
+      echo 2
+      ;;
+    24h)
+      echo 3
+      ;;
+    *)
+      error "Unknown time period ${1}"
+      ;;
   esac
 }
 
@@ -3037,7 +3037,7 @@ keencli_self_test_parse_requirements() {
 
 # :command.initialize
 initialize() {
-  version="0.3.4"
+  version="0.4.0"
   long_usage=''
   set -e
 
