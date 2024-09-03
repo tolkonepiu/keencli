@@ -74,7 +74,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           # renovate: datasource=ruby-version depName=ruby versioning=ruby
-          ruby-version: 3.3.4
+          ruby-version: 3.3.5
       - name: 🏗️ Setup bashly
         run: gem install bashly -v "${BASHLY_VERSION}"
         env:
