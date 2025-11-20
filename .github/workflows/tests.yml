@@ -18,7 +18,7 @@ jobs:
           bats-version: 1.13.0
 
       - name: ⤵️ Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: 🚀 Run bats
         run: bats -r .
