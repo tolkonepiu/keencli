@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: 🚀 Run yamllint
         uses: reviewdog/action-yamllint@v1
         with:
@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: 🚀 Run shellcheck
         uses: reviewdog/action-shellcheck@v1
         with:
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: 🚀 Run shfmt
         uses: reviewdog/action-shfmt@v1
         with:
@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: 🚀 Run markdownlint
         uses: reviewdog/action-markdownlint@v0
         with:
@@ -69,7 +69,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: 🏗️ Setup ruby
         uses: ruby/setup-ruby@v1
         with:
