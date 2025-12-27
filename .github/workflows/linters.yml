@@ -19,7 +19,7 @@ jobs:
         with:
           reporter: github-pr-review
           filter_mode: nofilter
-          fail_on_error: true
+          fail_level: error
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
   shellcheck:
@@ -33,7 +33,7 @@ jobs:
         with:
           reporter: github-pr-review
           filter_mode: nofilter
-          fail_on_error: true
+          fail_level: error
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
   shfmt:
@@ -45,7 +45,6 @@ jobs:
       - name: 🚀 Run shfmt
         uses: reviewdog/action-shfmt@v1
         with:
-          reporter: github-pr-review
           filter_mode: nofilter
           fail_on_error: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -61,7 +60,7 @@ jobs:
         with:
           reporter: github-pr-review
           filter_mode: nofilter
-          fail_on_error: true
+          fail_level: error
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
   bashly:
@@ -74,12 +73,12 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           # renovate: datasource=ruby-version depName=ruby versioning=ruby
-          ruby-version: 4.0.0
+          ruby-version: 3.4.8
       - name: 🏗️ Setup bashly
         run: gem install bashly -v "${BASHLY_VERSION}"
         env:
           # renovate: datasource=github-releases depName=DannyBen/bashly
-          BASHLY_VERSION: 1.3.3
+          BASHLY_VERSION: 1.3.5
       - name: 🚀 Run bashly
         run: bashly generate --upgrade
       - name: suggester / bashly
@@ -87,5 +86,5 @@ jobs:
         with:
           tool_name: bashly
           filter_mode: nofilter
-          fail_on_error: true
+          fail_level: error
           github_token: ${{ secrets.GITHUB_TOKEN }}

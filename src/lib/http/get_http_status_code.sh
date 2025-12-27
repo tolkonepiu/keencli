@@ -1,10 +1,14 @@
 function get_http_status_code() {
-  local response
+  local response first_line
+
   response="${1:?response must be set}"
 
-  echo "${response}" |
-    tail -n +1 |
-    head -1 |
-    grep -e "^HTTP" |
-    awk -F " " '{print $2}'
+  IFS=$'\n' read -ra lines <<<"${response}"
+  first_line="${lines[0]}"
+
+  if [[ "${first_line}" =~ ^HTTP[[:space:]]+([0-9]+) ]]; then
+    echo "${BASH_REMATCH[1]}"
+  elif [[ "${first_line}" =~ ^HTTP/[0-9.]+[[:space:]]+([0-9]+) ]]; then
+    echo "${BASH_REMATCH[1]}"
+  fi
 }
